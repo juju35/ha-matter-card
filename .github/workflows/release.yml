@@ -25,13 +25,10 @@ jobs:
     permissions:
       contents: read
 
-  hacs:
-    uses: ./.github/workflows/hacs.yml
-    permissions:
-      contents: read
-
+  # The HACS validation (hacs.yml) is not a prerequisite of the first release: it fails as long as the repository
+  # has no release at all. Add `hacs` back to `needs` (with its job) once v1.0.0 is published.
   release:
-    needs: [lint, validate, hacs]
+    needs: [lint, validate]
     runs-on: ubuntu-latest
     # Debian 12 container (Node 22 included): apt goes to the Debian mirrors, not the runner's Ubuntu ones,
     # which kept failing. The job runs as root, hence no sudo below.
