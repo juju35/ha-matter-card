@@ -1,6 +1,6 @@
 // Shared by the screenshot scripts: theme variables, the <ha-card> stand-in, the mock network, a fixed clock and the
 // render loop.
-import { existsSync, readFileSync, writeFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { chromium } from "playwright";
 import { NOW } from "./mock.mjs";
@@ -40,6 +40,9 @@ const pageHtml = (theme, width) => `<!doctype html><html><head><meta charset="ut
   body { margin: 0; padding: 16px; background: var(--primary-background-color); color: var(--primary-text-color);
          font-family: Roboto, "Segoe UI", Helvetica, Arial, sans-serif; width: ${width}px; }
 </style></head><body><div id="root"></div></body></html>`;
+
+// screenshots/ is not in a fresh checkout until the first captures are committed.
+mkdirSync(`${root}screenshots`, { recursive: true });
 
 export const launch = () => chromium.launch(process.env.CHROMIUM_PATH ? { executablePath: process.env.CHROMIUM_PATH } : {});
 

@@ -30,4 +30,3 @@ export const GIFS = [
   // A node unavailable: its device and its link turn red, the device blinks.
   { name: "banner-unavailable", tag: "matter-card", width: 480, banner: true, config: {} },
 ];
-
