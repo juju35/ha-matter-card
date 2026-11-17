@@ -48,8 +48,11 @@ const measure = async (cases) => {
   });
   await page.waitForTimeout(100);
   const out = await page.evaluate(
-    ({ cases, THEMES }) =>
-      cases.map((c) => {
+    async ({ cases, THEMES }) => {
+      // The header is fitted (status pill) once laid out: a frame after the card is attached or changed.
+      const frame = () => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+      const out = [];
+      for (const c of cases) {
         const box = document.createElement("div");
         box.style.cssText = `width:${c.width}px;${Object.entries(THEMES[c.theme]).map(([k, v]) => `${k}:${v}`).join(";")}`;
         document.body.appendChild(box);
@@ -57,10 +60,12 @@ const measure = async (cases) => {
         el.setConfig({ type: `custom:${c.type}`, language: c.lang, ...c.config });
         el.hass = window.mockHass({ dark: c.theme === "dark" });
         box.appendChild(el);
+        await frame();
         const sr = el.shadowRoot;
         const click = (sel) => sr.querySelector(sel)?.dispatchEvent(new MouseEvent("click", { bubbles: true, composed: true, detail: 1 }));
         if (c.zoom) click(".zoom");
         if (c.detail) click(".tile[data-node]");
+        if (c.zoom || c.detail) await frame();
         const card = sr.querySelector("ha-card").getBoundingClientRect();
         const rect = (n) => n.getBoundingClientRect();
         const shown = (n) => n.getClientRects().length > 0 && getComputedStyle(n).visibility !== "hidden" && getComputedStyle(n).display !== "none";
@@ -125,8 +130,10 @@ const measure = async (cases) => {
           })(),
         };
         box.remove();
-        return r;
-      }),
+        out.push(r);
+      }
+      return out;
+    },
     { cases, THEMES },
   );
   await page.close();
