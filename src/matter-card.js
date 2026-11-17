@@ -2537,7 +2537,7 @@ const BANNER_STYLE = `
 ${PILL_STYLE}  .titles.below .trow { display: contents; }
   .titles.below .bst { order: 2; align-self: flex-start; margin-top: 2px; }
   .titles.below .stats { order: 1; max-height: 16px; }
-  .titles.dot .bst { padding: 4px; } .titles.dot .bst .txt { display: none; }
+  .titles.dot-only .bst { padding: 4px; } .titles.dot-only .bst .txt { display: none; }
   .name { font-size: 16px; font-weight: 500; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   /* The statistics on two lines at most: a part that does not fit goes to a third line, clipped away; the "·" that
      starts a line sits in the negative margin, clipped too. */
@@ -2702,7 +2702,7 @@ const MINI_STYLE = `
   .mhead.below > .title { flex: 1 1 calc(100% - 32px); }
   .mhead.below:not(:has(> .zoom)) > .title { flex-basis: 100%; }
   .mhead.below > .bst { order: 3; }
-  .mhead.dot > .bst { padding: 4px; } .mhead.dot > .bst .txt { display: none; }
+  .mhead.dot-only > .bst { padding: 4px; } .mhead.dot-only > .bst .txt { display: none; }
 ${MINI_CHIPS_STYLE}  .zoom { all: unset; flex: none; cursor: pointer; width: 24px; height: 24px; margin: -4px -4px -4px 0; border-radius: 50%;
           display: grid; place-items: center; color: var(--secondary-text-color); }
   .zoom .icon { width: 16px; height: 16px; }
@@ -3052,14 +3052,14 @@ class MatterCard extends HTMLElement {
   // title's row, right after the title, only when the whole title and the pill's whole label fit there; otherwise it
   // takes a line of its own under the subtitle (.below), the title whole on its row (cut only when it does not fit
   // alone) and the subtitle on one line. When the three lines do not fit in the banner above the ground strip, or
-  // the label does not fit its line, the pill shows its dot alone (.dot): beside the title when the whole title
+  // the label does not fit its line, the pill shows its dot alone (.dot-only): beside the title when the whole title
   // leaves it room, else under the subtitle.
   _fitPill() {
     for (const t of this.shadowRoot?.querySelectorAll?.(".head .titles, .header .titles, .mhead") || []) {
       const row = t.matches(".mhead") ? t : t.querySelector(".trow");
       const chips = row ? [...row.querySelectorAll(":scope > .bst")] : [];
       if (!chips[0]?.getBoundingClientRect) continue;
-      t.classList.remove("below", "dot");
+      t.classList.remove("below", "dot-only");
       const name = row.querySelector(".name, .title");
       const gap = parseFloat(getComputedStyle(row).columnGap) || 0;
       const outer = (c) => c.getBoundingClientRect().width + (parseFloat(getComputedStyle(c).marginLeft) || 0) + (parseFloat(getComputedStyle(c).marginRight) || 0);
@@ -3078,7 +3078,7 @@ class MatterCard extends HTMLElement {
         return !tx || tx.scrollWidth <= tx.clientWidth + 0.5;
       });
       if (whole && box.bottom <= floor + 0.5 && box.top >= banner.getBoundingClientRect().top - 0.5) continue;
-      t.classList.add("dot");
+      t.classList.add("dot-only");
       if (title + pills() <= room) t.classList.remove("below");
     }
   }

@@ -193,6 +193,7 @@ test("the status pill: beside the whole title or under the subtitle, whole label
     if (!r.pill.dot) assert.ok(r.pill.cut <= 0.5, `pill "${r.pill.label}" cut by ${r.pill.cut}px: ${at}`);
     if (r.pill.beside) assert.ok(r.pill.centred, `pill not centred on the title: ${at}`);
     if (r.pill.beside) assert.ok(r.pill.titleCut <= 0, `title cut beside the pill: ${at}`);
+    assert.ok(r.nameWidth >= 24, `title ${r.nameWidth}px wide: ${at}`);
     assert.ok(r.pill.low <= 0.5, `header text ${r.pill.low}px into the ground strip: ${at}`);
     assert.ok(r.pill.out <= 0.5, `header text ${r.pill.out}px out of the banner: ${at}`);
   });
