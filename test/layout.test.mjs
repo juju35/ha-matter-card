@@ -48,8 +48,11 @@ const measure = async (cases) => {
   });
   await page.waitForTimeout(100);
   const out = await page.evaluate(
-    ({ cases, THEMES }) =>
-      cases.map((c) => {
+    async ({ cases, THEMES }) => {
+      // The header is fitted (status pill) once laid out: a frame after the card is attached or changed.
+      const frame = () => new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
+      const out = [];
+      for (const c of cases) {
         const box = document.createElement("div");
         box.style.cssText = `width:${c.width}px;${Object.entries(THEMES[c.theme]).map(([k, v]) => `${k}:${v}`).join(";")}`;
         document.body.appendChild(box);
@@ -57,10 +60,12 @@ const measure = async (cases) => {
         el.setConfig({ type: `custom:${c.type}`, language: c.lang, ...c.config });
         el.hass = window.mockHass({ dark: c.theme === "dark" });
         box.appendChild(el);
+        await frame();
         const sr = el.shadowRoot;
         const click = (sel) => sr.querySelector(sel)?.dispatchEvent(new MouseEvent("click", { bubbles: true, composed: true, detail: 1 }));
         if (c.zoom) click(".zoom");
         if (c.detail) click(".tile[data-node]");
+        if (c.zoom || c.detail) await frame();
         const card = sr.querySelector("ha-card").getBoundingClientRect();
         const rect = (n) => n.getBoundingClientRect();
         const shown = (n) => n.getClientRects().length > 0 && getComputedStyle(n).visibility !== "hidden" && getComputedStyle(n).display !== "none";
@@ -93,7 +98,11 @@ const measure = async (cases) => {
         const badge = sr.querySelector(".badge");
         const tileIcon = sr.querySelector(".grid .ic");
         const modal = sr.querySelector(".modal");
+        const tiles = [...sr.querySelectorAll(".grid .tile[data-node]")];
         const r = {
+          cols: new Set(tiles.map((n) => Math.round(rect(n).left))).size,
+          cutNames: tiles.map((n) => n.querySelector(".tname")).filter((n) => n.scrollHeight > n.clientHeight + 0.5 || n.scrollWidth > n.clientWidth + 0.5).map((n) => n.textContent),
+          smallText: tiles.flatMap((n) => [...n.querySelectorAll(".tname, .tstate, .tag")]).filter((n) => parseFloat(getComputedStyle(n).fontSize) < 11).map((n) => n.textContent),
           outside,
           under,
           nameWidth: name ? rect(name).width : 0,
@@ -102,10 +111,29 @@ const measure = async (cases) => {
           tileIcon: tileIcon ? Math.round(rect(tileIcon).width) : null,
           modalTop: modal ? rect(modal).top - card.top : null,
           modalOut: modal ? rect(modal).right > card.right + 0.5 || rect(modal).left < card.left - 0.5 : false,
+          pill: (() => {
+            const p = sr.querySelector(".bst");
+            const tx = p?.querySelector(".txt");
+            if (!tx) return null;
+            const nm = rect(name);
+            const pr = rect(p);
+            // The header's text against the banner and the top of its ground strip.
+            const t = p.closest(".titles") || p.parentElement;
+            const banner = p.closest(".banner");
+            const parts = [...t.querySelectorAll(":scope > *, .trow > *")].map(rect).filter((r) => r.width);
+            const b = banner ? rect(banner) : null;
+            const floor = banner ? rect(banner.querySelector(".strip")).top : Infinity;
+            return { cut: tx.scrollWidth - tx.clientWidth, dot: !shown(tx), label: p.getAttribute("aria-label"), beside: pr.top < nm.bottom - 2,
+                     centred: Math.abs((pr.top + pr.bottom) / 2 - (nm.top + nm.bottom) / 2) <= 2, titleCut: name.scrollWidth - name.clientWidth,
+                     low: Math.max(...parts.map((r) => r.bottom)) - floor,
+                     out: b ? Math.max(b.top - Math.min(...parts.map((r) => r.top)), Math.max(...parts.map((r) => r.right)) - b.right) : 0 };
+          })(),
         };
         box.remove();
-        return r;
-      }),
+        out.push(r);
+      }
+      return out;
+    },
     { cases, THEMES },
   );
   await page.close();
@@ -113,7 +141,7 @@ const measure = async (cases) => {
   return out;
 };
 
-const LANGS = ["en", "de", "el", "sr", "lv", "hu", "pt", "ru"];
+const LANGS = ["en", "fr", "de", "el", "sr", "lv", "hu", "pt", "ru"];
 const matrix = (variants, widths) => {
   const cases = [];
   for (const v of variants) for (const lang of LANGS) for (const theme of ["light", "dark"]) for (const width of widths) cases.push({ ...v, lang, theme, width });
@@ -148,5 +176,45 @@ test("the node popup opens at the top of the card and stays in it", { timeout: 6
     const at = `${c.type} ${c.lang} ${c.theme} ${c.width}px`;
     assert.ok(r.modalTop !== null && r.modalTop <= 12, `popup top ${r.modalTop}: ${at}`);
     assert.equal(r.modalOut, false, `popup outside the card: ${at}`);
+  });
+});
+
+// The status pill: on the title's row only beside the whole title (no ellipsis), otherwise on a line of its own under
+// the subtitle; its label whole, or its dot alone (always at 190 px); nothing into the ground strip or out of the banner.
+test("the status pill: beside the whole title or under the subtitle, whole label or dot, inside the banner", { timeout: 300000 }, async (t) => {
+  if (skip) return t.skip(skip);
+  const widths = [190, 245, 300, 400, 460, 500];
+  const langs = ["en", "fr", "de", "hu", "el", "ru"];
+  const pillMatrix = (variants) => matrix(variants, widths).filter((c) => langs.includes(c.lang));
+  const cases = [
+    ...pillMatrix([{ type: "matter-card", config: {} }, { type: "matter-card", config: { illustration: false } }]),
+    ...pillMatrix([{ type: "matter-mini-card", config: {} }, { type: "matter-mini-card", config: { illustration: false } }]),
+    ...pillMatrix([{ type: "matter-mini-card", config: {}, zoom: true }]),
+  ];
+  const results = await measure(cases);
+  results.forEach((r, i) => {
+    const c = cases[i];
+    const at = `${c.type} ${JSON.stringify(c.config)}${c.zoom ? " zoomed" : ""} ${c.lang} ${c.theme} ${c.width}px`;
+    assert.ok(r.pill, `no pill: ${at}`);
+    if (c.width <= 200) assert.ok(r.pill.dot, `pill label shown: ${at}`);
+    if (!r.pill.dot) assert.ok(r.pill.cut <= 0.5, `pill "${r.pill.label}" cut by ${r.pill.cut}px: ${at}`);
+    if (r.pill.beside) assert.ok(r.pill.centred, `pill not centred on the title: ${at}`);
+    if (r.pill.beside) assert.ok(r.pill.titleCut <= 0, `title cut beside the pill: ${at}`);
+    assert.ok(r.nameWidth >= 24, `title ${r.nameWidth}px wide: ${at}`);
+    assert.ok(r.pill.low <= 0.5, `header text ${r.pill.low}px into the ground strip: ${at}`);
+    assert.ok(r.pill.out <= 0.5, `header text ${r.pill.out}px out of the banner: ${at}`);
+  });
+});
+
+test("node tiles: two per row from 400 px, every name whole (the transport tag on the state line), no text under 11 px", { timeout: 120000 }, async (t) => {
+  if (skip) return t.skip(skip);
+  const cases = [...matrix([{ type: "matter-card", config: {} }], [400, 450, 500]), ...matrix([{ type: "matter-card", config: {} }], [245, 300])];
+  const results = await measure(cases);
+  results.forEach((r, i) => {
+    const c = cases[i];
+    const at = `${c.lang} ${c.theme} ${c.width}px`;
+    if (c.width >= 400) assert.equal(r.cols, 2, `tiles per row: ${at}`);
+    assert.deepEqual(r.cutNames, [], `names cut: ${at}`);
+    assert.deepEqual(r.smallText, [], `text under 11 px: ${at}`);
   });
 });

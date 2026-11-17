@@ -1,5 +1,18 @@
 # Changelog
 
+## 1.1.0 - 2026-11-17
+
+### Features
+- Illustrated header, the same on both cards (90 px): a house section with the Matter hub at its centre linked to six devices, packets travelling along the links and a pulsing ping around the hub, on a 10 px purple Matter network ground strip edge to edge (day and night). An unreachable node turns its device and link red, the device blinking.
+- The Matter badge's colour follows the network's status (healthy purple, low battery amber, unreachable node red, no node grey), day and night, on the full and mini cards and in the classic header.
+- The mini card gets the full card's banner (title and status pill on the sky, the scene at the right, its detail button in the corner), with its chips below; `illustration: false` keeps its compact layout.
+- A status pill after the title on both cards and both headers (*Healthy*, *2 issues*, *No devices*): a dot and its label in the badge's colour; beside the title only when the whole title and its whole label fit there (measured, in every language), else on a line of its own under the subtitle (the subtitle then on one line); its dot alone when its label does not fit in the banner above the strip, and on cards of 200 px or less. The mini card's expand / collapse button is a 24 px frosted round in the banner's top-right corner, the scene standing left of it.
+- Night banner when the sun is below the horizon (`sun.sun`) or with the dark theme; still forced with `illustration_theme: day | night`.
+- Night picture with the dark theme even while the sun is up.
+
+### Fixes
+- **Whole device names**: the transport tag (Thread, Wi-Fi, Ethernet) moves to the state line, after the state or under it when both do not fit, so the name has the tile's width and goes on to a second line rather than be cut (« Kids room se… »); the tiles stay two per row down to a 390 px card.
+
 ## 1.0.0 - 2026-11-16
 
 ### Features

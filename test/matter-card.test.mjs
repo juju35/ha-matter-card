@@ -195,8 +195,8 @@ test("the full card: banner stats, status chips, fabrics, Thread tile, one tile 
   assert.match(html, /class="tile lvl-warn"[^>]*data-node="dev_blind"/);
   assert.match(html, /Commission device/);
   // The unavailable node blinks red in the banner; a healthy network has none.
-  assert.match(html, /class="down blink"/);
-  assert.doesNotMatch(render(card(mc.MatterCard, {}, await withData(mockHass({ healthy: true })))), /class="down blink"/);
+  assert.match(html, /class="dev down"/);
+  assert.doesNotMatch(render(card(mc.MatterCard, {}, await withData(mockHass({ healthy: true })))), /class="dev down"/);
 });
 
 test("sort, columns, show_thread, show_commission, show_bridged and illustration", async () => {
@@ -211,7 +211,40 @@ test("sort, columns, show_thread, show_commission, show_bridged and illustration
   assert.equal((render(card(mc.MatterCard, { show_bridged: true }, hass)).match(/data-node="/g) || []).length, 12);
   const classic = render(card(mc.MatterCard, { illustration: false }, hass));
   assert.doesNotMatch(classic, /class="scene"/);
-  assert.match(classic, /<div class="header"><div class="badge">/);
+  assert.match(classic, /<div class="header"><div class="badge s-alert">/);
+});
+
+test("the Matter badge's colour is the network's status, on both cards", async () => {
+  const issues = await withData();
+  const healthy = await withData(mockHass({ healthy: true }));
+  assert.match(render(card(mc.MatterCard, {}, issues)), /class="badge s-alert"/);
+  assert.match(render(card(mc.MatterCard, {}, healthy)), /class="badge s-ok"/);
+  assert.match(render(card(mc.MatterMiniCard, {}, issues)), /class="badge s-alert"/);
+  assert.match(render(card(mc.MatterMiniCard, {}, healthy)), /class="badge s-ok"/);
+});
+
+test("the mini card: the full card's banner, or its classic layout without the illustration", async () => {
+  const hass = await withData();
+  const html = render(card(mc.MatterMiniCard, {}, hass));
+  assert.match(html, /class="banner"/);
+  assert.match(html, /class="scene"/);
+  assert.match(html, /class="dev down"/);
+  const classic = render(card(mc.MatterMiniCard, { illustration: false }, hass));
+  assert.doesNotMatch(classic, /class="scene"/);
+  assert.match(render(card(mc.MatterMiniCard, { illustration_theme: "night" }, hass)), /class="banner night"/);
+});
+
+test("night banner: the sun below the horizon or the dark theme, even with the sun up", () => {
+  const sun = (state, dark = false) => {
+    const h = mockHass({ dark });
+    return { ...h, states: { ...h.states, "sun.sun": { entity_id: "sun.sun", state, attributes: {} } } };
+  };
+  assert.match(render(card(mc.MatterCard, {}, sun("below_horizon"))), /class="banner night"/);
+  assert.match(render(card(mc.MatterCard, {}, sun("above_horizon", true))), /class="banner night"/);
+  assert.doesNotMatch(render(card(mc.MatterCard, {}, sun("above_horizon"))), /banner night/);
+  assert.doesNotMatch(render(card(mc.MatterCard, { illustration_theme: "day" }, sun("above_horizon", true))), /banner night/);
+  assert.match(render(card(mc.MatterCard, { illustration_theme: "night" }, sun("above_horizon"))), /class="banner night"/);
+  assert.doesNotMatch(render(card(mc.MatterCard, { illustration_theme: "day" }, sun("below_horizon"))), /banner night/);
 });
 
 test("night banner: forced, else the dark theme", () => {
@@ -277,12 +310,13 @@ test("the mini card: the status, the transport chips and the issues", async () =
   const txt = text(html);
   assert.match(txt, /Matter 2 issues/);
   assert.match(txt, /5 Thread 2 Wi-Fi 1 Ethernet 1 unavailable 1 low battery/);
-  assert.match(html, /class="mini warn"/);
+  // The status pill takes the badge's colour: an unreachable node is an alert.
+  assert.match(html, /<div class="trow"><div class="name">Matter<\/div><span class="chip bst s-alert" role="img" title="2 issues" aria-label="2 issues">/);
   assert.match(html, /class="r pill alert"/);
   assert.doesNotMatch(html, /data-node=/);
   const ok = render(card(mc.MatterMiniCard, {}, await withData(mockHass({ healthy: true }))));
   assert.match(text(ok), /Matter Healthy/);
-  assert.match(ok, /class="mini ok"/);
+  assert.match(ok, /class="chip bst s-ok"/);
 });
 
 test("the mini card's detail button unfolds the full card; a click outside folds it back", () => {

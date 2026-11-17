@@ -29,6 +29,9 @@ const ICONS = {
   temperature: "M15 13V5A3 3 0 0 0 9 5V13A5 5 0 1 0 15 13M12 4A1 1 0 0 1 13 5V8H11V5A1 1 0 0 1 12 4Z",
   humidity: "M12,3.25C12,3.25 6,10 6,14C6,17.32 8.69,20 12,20A6,6 0 0,0 18,14C18,10 12,3.25 12,3.25M14.47,9.97L15.53,11.03L9.53,17.03L8.47,15.97M9.75,10A1.25,1.25 0 0,1 11,11.25A1.25,1.25 0 0,1 9.75,12.5A1.25,1.25 0 0,1 8.5,11.25A1.25,1.25 0 0,1 9.75,10M14.25,14.5A1.25,1.25 0 0,1 15.5,15.75A1.25,1.25 0 0,1 14.25,17A1.25,1.25 0 0,1 13,15.75A1.25,1.25 0 0,1 14.25,14.5Z",
   blinds: "M3,2H21A1,1 0 0,1 22,3V5A1,1 0 0,1 21,6H20V13A1,1 0 0,1 19,14H13V16.17C14.17,16.58 15,17.69 15,19A3,3 0 0,1 12,22A3,3 0 0,1 9,19C9,17.69 9.83,16.58 11,16.17V14H5A1,1 0 0,1 4,13V6H3A1,1 0 0,1 2,5V3A1,1 0 0,1 3,2M12,18A1,1 0 0,0 11,19A1,1 0 0,0 12,20A1,1 0 0,0 13,19A1,1 0 0,0 12,18Z",
+  // The scene's blind (mdi blinds-horizontal).
+  blinds_h:
+    "M20 19V3H4V19H2V21H22V19H20M16 9H18V11H16V9M14 11H6V9H14V11M18 7H16V5H18V7M14 5V7H6V5H14M6 19V13H14V14.82C13.55 15.14 13.25 15.66 13.25 16.25C13.25 17.22 14.03 18 15 18S16.75 17.22 16.75 16.25C16.75 15.66 16.45 15.13 16 14.82V13H18V19H6Z",
   shutter: "M3 4H21V8H19V20H17V8H7V20H5V8H3V4M8 9H16V11H8V9M8 12H16V14H8V12M8 15H16V17H8V15M8 18H16V20H8V18Z",
   curtains: "M23 3H1V1H23V3M2 22H6C6 19 4 17 4 17C10 13 11 4 11 4H2V22M22 4H13C13 4 14 13 20 17C20 17 18 19 18 22H22V4Z",
   garage: "M19,20H17V11H7V20H5V9L12,5L19,9V20M8,12H16V14H8V12M8,15H16V17H8V15M16,18V20H8V18H16Z",
@@ -137,7 +140,7 @@ const STRINGS = {
     show_bridged: "Bridged devices",
     illustration: "Illustration",
     illustration_theme: "Illustration theme",
-    theme_auto: "Automatic",
+    theme_auto: "Automatic (sun or dark theme)",
     theme_day: "Day",
     theme_night: "Night",
     zoom: "Detail button",
@@ -216,7 +219,7 @@ const STRINGS = {
     show_bridged: "Appareils pontés",
     illustration: "Illustration",
     illustration_theme: "Thème de l'illustration",
-    theme_auto: "Automatique",
+    theme_auto: "Automatique (soleil ou thème sombre)",
     theme_day: "Jour",
     theme_night: "Nuit",
     zoom: "Bouton de détail",
@@ -295,7 +298,7 @@ const STRINGS = {
     show_bridged: "Gebridgte Geräte",
     illustration: "Illustration",
     illustration_theme: "Illustrationsthema",
-    theme_auto: "Automatisch",
+    theme_auto: "Automatisch (Sonne oder dunkles Design)",
     theme_day: "Tag",
     theme_night: "Nacht",
     zoom: "Detail-Schaltfläche",
@@ -374,7 +377,7 @@ const STRINGS = {
     show_bridged: "Dispositivos puenteados",
     illustration: "Ilustración",
     illustration_theme: "Tema de la ilustración",
-    theme_auto: "Automático",
+    theme_auto: "Automático (sol o tema oscuro)",
     theme_day: "Día",
     theme_night: "Noche",
     zoom: "Botón de detalle",
@@ -458,7 +461,7 @@ const STRINGS = {
     show_bridged: "Премошћени уређаји",
     illustration: "Илустрација",
     illustration_theme: "Тема илустрације",
-    theme_auto: "Аутоматски",
+    theme_auto: "Аутоматски (сунце или тамна тема)",
     theme_day: "Дан",
     theme_night: "Ноћ",
     zoom: "Дугме за детаље",
@@ -542,7 +545,7 @@ const STRINGS = {
     show_bridged: "Premošćeni uređaji",
     illustration: "Ilustracija",
     illustration_theme: "Tema ilustracije",
-    theme_auto: "Automatski",
+    theme_auto: "Automatski (sunce ili tamna tema)",
     theme_day: "Dan",
     theme_night: "Noć",
     zoom: "Dugme za detalje",
@@ -621,7 +624,7 @@ const STRINGS = {
     show_bridged: "Dispositivi in bridge",
     illustration: "Illustrazione",
     illustration_theme: "Tema dell'illustrazione",
-    theme_auto: "Automatico",
+    theme_auto: "Automatico (sole o tema scuro)",
     theme_day: "Giorno",
     theme_night: "Notte",
     zoom: "Pulsante dettagli",
@@ -700,7 +703,7 @@ const STRINGS = {
     show_bridged: "Gebridgede apparaten",
     illustration: "Illustratie",
     illustration_theme: "Thema van de illustratie",
-    theme_auto: "Automatisch",
+    theme_auto: "Automatisch (zon of donker thema)",
     theme_day: "Dag",
     theme_night: "Nacht",
     zoom: "Detailknop",
@@ -779,7 +782,7 @@ const STRINGS = {
     show_bridged: "Dispositivos em ponte",
     illustration: "Ilustração",
     illustration_theme: "Tema da ilustração",
-    theme_auto: "Automático",
+    theme_auto: "Automático (sol ou tema escuro)",
     theme_day: "Dia",
     theme_night: "Noite",
     zoom: "Botão de detalhe",
@@ -868,7 +871,7 @@ const STRINGS = {
     show_bridged: "Urządzenia za mostkiem",
     illustration: "Ilustracja",
     illustration_theme: "Motyw ilustracji",
-    theme_auto: "Automatyczny",
+    theme_auto: "Automatyczny (słońce lub ciemny motyw)",
     theme_day: "Dzień",
     theme_night: "Noc",
     zoom: "Przycisk szczegółów",
@@ -954,7 +957,7 @@ const STRINGS = {
     show_bridged: "Dispozitive prin punte",
     illustration: "Ilustrație",
     illustration_theme: "Tema ilustrației",
-    theme_auto: "Automat",
+    theme_auto: "Automat (soare sau temă întunecată)",
     theme_day: "Zi",
     theme_night: "Noapte",
     zoom: "Buton de detalii",
@@ -1033,7 +1036,7 @@ const STRINGS = {
     show_bridged: "Brokoblede enheder",
     illustration: "Illustration",
     illustration_theme: "Illustrationstema",
-    theme_auto: "Automatisk",
+    theme_auto: "Automatisk (sol eller mørkt tema)",
     theme_day: "Dag",
     theme_night: "Nat",
     zoom: "Detaljeknap",
@@ -1112,7 +1115,7 @@ const STRINGS = {
     show_bridged: "Bryggade enheter",
     illustration: "Illustration",
     illustration_theme: "Illustrationstema",
-    theme_auto: "Automatiskt",
+    theme_auto: "Automatiskt (sol eller mörkt tema)",
     theme_day: "Dag",
     theme_night: "Natt",
     zoom: "Detaljknapp",
@@ -1191,7 +1194,7 @@ const STRINGS = {
     show_bridged: "Устройства през мост",
     illustration: "Илюстрация",
     illustration_theme: "Тема на илюстрацията",
-    theme_auto: "Автоматично",
+    theme_auto: "Автоматично (слънце или тъмна тема)",
     theme_day: "Ден",
     theme_night: "Нощ",
     zoom: "Бутон за детайли",
@@ -1280,7 +1283,7 @@ const STRINGS = {
     show_bridged: "Устройства через мост",
     illustration: "Иллюстрация",
     illustration_theme: "Тема иллюстрации",
-    theme_auto: "Автоматически",
+    theme_auto: "Автоматически (солнце или тёмная тема)",
     theme_day: "День",
     theme_night: "Ночь",
     zoom: "Кнопка подробностей",
@@ -1369,7 +1372,7 @@ const STRINGS = {
     show_bridged: "Пристрої через міст",
     illustration: "Ілюстрація",
     illustration_theme: "Тема ілюстрації",
-    theme_auto: "Автоматично",
+    theme_auto: "Автоматично (сонце або темна тема)",
     theme_day: "День",
     theme_night: "Ніч",
     zoom: "Кнопка деталей",
@@ -1448,7 +1451,7 @@ const STRINGS = {
     show_bridged: "Hídon át csatlakozó eszközök",
     illustration: "Illusztráció",
     illustration_theme: "Illusztráció témája",
-    theme_auto: "Automatikus",
+    theme_auto: "Automatikus (nap vagy sötét téma)",
     theme_day: "Nappal",
     theme_night: "Éjszaka",
     zoom: "Részletek gomb",
@@ -1537,7 +1540,7 @@ const STRINGS = {
     show_bridged: "Premostené zariadenia",
     illustration: "Ilustrácia",
     illustration_theme: "Téma ilustrácie",
-    theme_auto: "Automaticky",
+    theme_auto: "Automaticky (slnko alebo tmavá téma)",
     theme_day: "Deň",
     theme_night: "Noc",
     zoom: "Tlačidlo podrobností",
@@ -1626,7 +1629,7 @@ const STRINGS = {
     show_bridged: "Přemostěná zařízení",
     illustration: "Ilustrace",
     illustration_theme: "Motiv ilustrace",
-    theme_auto: "Automaticky",
+    theme_auto: "Automaticky (slunce nebo tmavý motiv)",
     theme_day: "Den",
     theme_night: "Noc",
     zoom: "Tlačítko podrobností",
@@ -1715,7 +1718,7 @@ const STRINGS = {
     show_bridged: "Premoščene naprave",
     illustration: "Ilustracija",
     illustration_theme: "Tema ilustracije",
-    theme_auto: "Samodejno",
+    theme_auto: "Samodejno (sonce ali temna tema)",
     theme_day: "Dan",
     theme_night: "Noč",
     zoom: "Gumb za podrobnosti",
@@ -1799,7 +1802,7 @@ const STRINGS = {
     show_bridged: "Ierīces caur tiltu",
     illustration: "Ilustrācija",
     illustration_theme: "Ilustrācijas tēma",
-    theme_auto: "Automātiski",
+    theme_auto: "Automātiski (saule vai tumšā tēma)",
     theme_day: "Diena",
     theme_night: "Nakts",
     zoom: "Detaļu poga",
@@ -1878,7 +1881,7 @@ const STRINGS = {
     show_bridged: "Συσκευές μέσω γέφυρας",
     illustration: "Εικονογράφηση",
     illustration_theme: "Θέμα εικονογράφησης",
-    theme_auto: "Αυτόματο",
+    theme_auto: "Αυτόματο (ήλιος ή σκοτεινό θέμα)",
     theme_day: "Ημέρα",
     theme_night: "Νύχτα",
     zoom: "Κουμπί λεπτομερειών",
@@ -2414,25 +2417,42 @@ const watchOutside = (card, handler) => {
 };
 
 // ---------------------------------------------------------------------------
-// The banner's scene: the Matter hub and four devices, linked by flowing dashes; an unavailable device blinks red
+// The banner's scene: a house section, the Matter hub at its centre linked to six devices; packets travel the
+// links, and an unreachable device turns red and blinks
 // ---------------------------------------------------------------------------
 
-// Every animation of the banner lasts a divisor of 6 s (flow 1.5 s, blink 1.5 s, packets 2 s): a 6 s recording loops.
-// The scene is drawn in a 200 × 80 box whose bottom edge stands on the strip.
+// Every animation of the banner lasts a divisor of 6 s (packets 1.5 / 2 / 3 s, ping 2 s, blink 1.5 s, strip 2 s):
+// a 6 s recording loops. The scene is drawn in the 108 × 80 window (x 94 → 202) of a 200 × 80 box whose bottom
+// edge stands on the ground strip; the house's walls go down to it. No SVG ids: several cards share a page safely.
+const SCENE_HUB = [148, 44];
 const SCENE_DEVICES = [
-  { x: 52, y: 26, r: 10, icon: "light", at: "translate(46 20) scale(0.5)" },
-  { x: 56, y: 62, r: 9, icon: "plug", at: "translate(50.5 56.5) scale(0.46)" },
-  { x: 148, y: 26, r: 10, icon: "lock", at: "translate(142 20) scale(0.5)" },
-  { x: 146, y: 62, r: 9, icon: "temperature", at: "translate(140.5 56.5) scale(0.46)" },
+  [112, 22, "light"],
+  [140, 14, "outlet"],
+  [168, 31, "temperature"],
+  [110, 58, "motion"],
+  [186, 58, "lock"],
+  [160, 66, "blinds_h"],
 ];
+const SCENE_DOWN = 4;
+const SCENE_SPEEDS = [1.5, 2, 3, 1.5, 2, 3];
 const sceneSvg = (down) => {
-  const isDown = (i) => down && i === SCENE_DEVICES.length - 1;
-  return `<svg class="scene" viewBox="0 0 200 80" preserveAspectRatio="xMaxYMax meet" aria-hidden="true" focusable="false">
-    <g class="links">${SCENE_DEVICES.map((d, i) => `<line class="${isDown(i) ? "down" : "flow"}" x1="100" y1="42" x2="${d.x}" y2="${d.y}"/>`).join("")}</g>
-    <g class="devs">${SCENE_DEVICES.map((d, i) => `<circle class="${isDown(i) ? "down blink" : "up"}" cx="${d.x}" cy="${d.y}" r="${d.r}"/>`).join("")}</g>
-    <g class="glyphs">${SCENE_DEVICES.map((d, i) => `<path class="${isDown(i) ? "down" : ""}" transform="${d.at}" d="${ICONS[d.icon]}"/>`).join("")}</g>
-    <circle class="hub" cx="100" cy="42" r="13"/>
-    <path class="hub-logo" transform="translate(92.5 34.5) scale(0.0293)" d="${MATTER}"/>
+  const [hx, hy] = SCENE_HUB;
+  const bad = (i) => down && i === SCENE_DOWN;
+  const links = SCENE_DEVICES.map(([x, y], i) => {
+    const line = `<line class="${bad(i) ? "down" : "up"}" x1="${hx}" y1="${hy}" x2="${x}" y2="${y}"/>`;
+    if (bad(i)) return line;
+    return `${line}<circle class="pkt" r="1.6" style="offset-path:path('M${hx} ${hy} L${x} ${y}');animation-duration:${SCENE_SPEEDS[i]}s;animation-delay:-${i * 0.5}s"/>`;
+  }).join("");
+  const devices = SCENE_DEVICES.map(
+    ([x, y, icon], i) =>
+      `<g class="dev${bad(i) ? " down" : ""}" transform="translate(${x} ${y})"><circle r="9"/><path transform="translate(-6.5 -6.5) scale(0.54)" d="${ICONS[icon]}"/>${
+        bad(i) ? '<circle class="alarm blink" cx="6.6" cy="-6.6" r="2.4"/>' : ""
+      }</g>`,
+  ).join("");
+  return `<svg class="scene" viewBox="94 0 108 80" preserveAspectRatio="xMaxYMax meet" aria-hidden="true" focusable="false">
+    <path class="house" d="M98 80 V30 L148 6 L198 30 V80"/><line class="floor" x1="98" y1="44" x2="198" y2="44"/>
+    <g class="links">${links}</g>${devices}
+    <g transform="translate(${hx} ${hy})"><circle class="ping" r="10"/><circle class="hub" r="10"/><path class="hub-logo" transform="translate(-7 -7) scale(0.0273)" d="${MATTER}"/></g>
   </svg>`;
 };
 
@@ -2455,38 +2475,69 @@ const COMMON_STYLE = `
   .warning { padding: 16px; color: color-mix(in srgb, var(--mc-warn) 40%, var(--primary-text-color, #212121)); }
 `;
 
-const FULL_STYLE = `
-  /* Status pill: the state colour on a tint, the text mixed with the text colour to stay readable. */
-  .chip { display: inline-flex; align-items: center; gap: 4px; padding: 1px 8px; border-radius: 12px; font-size: 11px; font-weight: 500;
-          line-height: 16px; white-space: nowrap; min-width: 0; max-width: 100%; box-sizing: border-box; overflow: hidden; flex: 0 1 auto;
-          background: color-mix(in srgb, var(--c) 15%, transparent); color: color-mix(in srgb, var(--c) 40%, var(--primary-text-color, #212121)); }
-  .chip .txt { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
-  .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--c); flex: none; }
+// The width of an element's whole text in its own font, in fractional pixels (scrollWidth is rounded).
+let textCtx;
+const textWidth = (el) => {
+  const cs = getComputedStyle(el);
+  textCtx ??= document.createElement("canvas").getContext?.("2d");
+  if (!textCtx) return el.scrollWidth;
+  textCtx.font = `${cs.fontStyle} ${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
+  const pad = (parseFloat(cs.paddingLeft) || 0) + (parseFloat(cs.paddingRight) || 0);
+  return Math.max(el.scrollWidth, textCtx.measureText(el.textContent.trim()).width + pad);
+};
 
-  /* ── Illustrated header ── */
-  .banner { position: relative; height: var(--banner-h, 92px); overflow: hidden; --strip-h: 12px;
-            --sky-text: #1f1b4d; --sky-muted: #4b4680;
+// The status pill (a dot and its label in the badge's colour), on the banner, the classic header and the mini card.
+const PILL_STYLE = `
+  .s-ok { --c: var(--mc-accent); } .s-warn { --c: var(--mc-warn); } .s-alert { --c: var(--mc-alert); } .s-na { --c: var(--mc-idle); }
+  .night .bst.s-ok { --c: #b9b7ff; }
+  .bst { flex: none; display: inline-flex; align-items: center; gap: 5px; padding: 1px 8px; border-radius: 12px; font-size: 11px; font-weight: 500;
+         line-height: 16px; white-space: nowrap; box-sizing: border-box; max-width: 100%; overflow: hidden;
+         background: color-mix(in srgb, var(--c) 15%, transparent); color: color-mix(in srgb, var(--c) 40%, var(--primary-text-color, #212121)); }
+  .banner .bst { background: color-mix(in srgb, var(--c) 18%, rgba(255,255,255,.78)); color: color-mix(in srgb, var(--c) 45%, #0d2a45); }
+  .banner.night .bst { background: color-mix(in srgb, var(--c) 30%, rgba(8,18,38,.55)); color: color-mix(in srgb, var(--c) 35%, #ffffff); }
+  .bst .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--c); flex: none; }
+  .bst .txt { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+  @container (max-width: 200px) { .bst { padding: 4px; } .bst .txt { display: none; } }
+`;
+
+// The illustrated header, the same on both cards: 90 px, the title on the lavender sky at its left, the scene at its
+// right, a 10 px ground strip edge to edge at its bottom (a network line with nodes, packets sliding along it).
+const BANNER_STYLE = `
+  .banner { position: relative; height: 90px; overflow: hidden; --strip-h: 10px; --scene-w: 108px;
+            --sky-text: #1f1b4d; --sky-muted: #4b4680; --mesh: #7f5bd6; --line: #5b52c9; --dev-bg: #f6f5ff; --dev-st: #c9c4f5; --wall: #d8cfc1;
             background: linear-gradient(90deg, #f7f6ff 0%, #ecebfd 34%, #d8d5fa 70%, #c6c2f5 100%); }
-  .banner.night { --sky-text: #ffffff; --sky-muted: rgba(255,255,255,.78);
+  .banner.night { --sky-text: #ffffff; --sky-muted: rgba(255,255,255,.78); --line: #a9a3ff; --dev-bg: #211e47; --dev-st: #3e3a7a; --wall: #3a4456;
                   background: linear-gradient(90deg, #26234f 0%, #211e47 36%, #1b1940 72%, #161435 100%); }
-  .banner .scene { position: absolute; right: 0; bottom: var(--strip-h); height: calc(100% - var(--strip-h));
-                   width: min(calc((var(--banner-h, 92px) - var(--strip-h)) * 2.5), var(--scene-max, 58%)); overflow: hidden; }
-  .strip { position: absolute; left: 0; right: 0; bottom: 0; height: var(--strip-h); background: #8f9aa6;
-           box-shadow: inset 0 1px 0 #7a8591, inset 0 -1px 0 #7a8591; }
-  .night .strip { background: #2c323b; box-shadow: inset 0 1px 0 #1f242b, inset 0 -1px 0 #1f242b; }
-  /* Packets travelling the network: a dashed line, pulsing. */
-  .strip .packets { position: absolute; left: 0; right: 0; top: calc(50% - 1px); height: 2px;
-                    background: repeating-linear-gradient(90deg, rgba(255,255,255,.85) 0 6px, transparent 6px 14px);
-                    animation: mc-pulse 2s ease-in-out infinite; }
-  .night .strip .packets { background: repeating-linear-gradient(90deg, rgba(255,255,255,.5) 0 6px, transparent 6px 14px); }
-  .head { position: absolute; z-index: 1; left: 0; top: 0; bottom: var(--strip-h); box-sizing: border-box;
-          right: min(calc((var(--banner-h, 92px) - var(--strip-h)) * 2.5), var(--scene-max, 58%));
-          display: flex; align-items: center; gap: 10px; padding: 8px 8px 8px 14px; min-width: 0; color: var(--sky-text); }
-  .badge { width: 40px; height: 40px; flex: none; border-radius: 50%; display: grid; place-items: center; color: var(--mc-accent);
-           background: rgba(255,255,255,.62); box-shadow: inset 0 0 0 1px rgba(91,91,214,.2); }
-  .night .badge { background: rgba(255,255,255,.12); color: #b9b7ff; box-shadow: inset 0 0 0 1px rgba(255,255,255,.14); }
+  /* With the detail button in its top-right corner, the scene stands left of it. */
+  .banner:has(> .zoom) { --btn-w: 30px; }
+  .banner .scene { position: absolute; right: var(--btn-w, 0px); bottom: var(--strip-h); height: calc(100% - var(--strip-h)); width: var(--scene-w); overflow: hidden; }
+  /* Ground strip: the Matter network line, its nodes every 24 px. */
+  .strip { position: absolute; left: 0; right: 0; bottom: 0; height: var(--strip-h);
+           background-color: color-mix(in srgb, var(--mesh) 18%, #e9eef5);
+           background-image: radial-gradient(circle, var(--mesh) 2px, transparent 2.5px), linear-gradient(var(--mesh), var(--mesh));
+           background-size: 24px 100%, 100% 1px; background-repeat: repeat-x, no-repeat; background-position: 0 50%, 0 50%;
+           box-shadow: inset 0 2px 0 color-mix(in srgb, var(--mesh) 50%, #fff); animation: mc-slide 2s linear infinite; }
+  .night .strip { background-color: color-mix(in srgb, var(--mesh) 20%, #1a202c); box-shadow: inset 0 2px 0 color-mix(in srgb, var(--mesh) 55%, #1a202c); }
+  .head { position: absolute; z-index: 1; left: 0; top: 0; bottom: var(--strip-h); box-sizing: border-box; right: calc(var(--scene-w) + var(--btn-w, 0px) + 4px);
+          display: flex; align-items: center; gap: 10px; padding: 6px 6px 6px 12px; min-width: 0; color: var(--sky-text); }
+  /* The Matter badge: its colour is the network's status (healthy accent, a low battery amber, an unreachable node red,
+     no node grey). */
+  .badge { position: relative; width: 40px; height: 40px; flex: none; border-radius: 50%; display: grid; place-items: center; color: var(--bc);
+           --bc: var(--mc-accent); background: rgba(255,255,255,.62); box-shadow: inset 0 0 0 1px rgba(91,91,214,.2); }
+  .night .badge { --bc: #b9b7ff; background: rgba(255,255,255,.12); box-shadow: inset 0 0 0 1px rgba(255,255,255,.14); }
+  .badge.s-warn, .night .badge.s-warn { --bc: var(--mc-warn); } .badge.s-alert, .night .badge.s-alert { --bc: var(--mc-alert); }
+  .badge.s-na, .night .badge.s-na { --bc: var(--mc-idle); }
   .badge .icon { width: 24px; height: 24px; }
-  .titles { flex: 1 1 0; min-width: 0; overflow: hidden; }
+  .titles { flex: 1 1 0; min-width: 0; overflow: hidden; display: flex; flex-direction: column; }
+  /* The title row: the name, then the status pill right after it, when the whole name and the pill's whole label
+     fit there (measured, see _fitPill); otherwise the pill takes a line of its own under the subtitle, which keeps
+     one line, and when that does not fit above the strip (or on the narrowest cards) only its dot stays. */
+  .trow { display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .trow > .name { flex: 0 1 auto; min-width: 4.5ch; }
+${PILL_STYLE}  .titles.below .trow { display: contents; }
+  .titles.below .bst { order: 2; align-self: flex-start; margin-top: 2px; }
+  .titles.below .stats { order: 1; max-height: 16px; }
+  .titles.dot-only .bst { padding: 4px; } .titles.dot-only .bst .txt { display: none; }
   .name { font-size: 16px; font-weight: 500; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   /* The statistics on two lines at most: a part that does not fit goes to a third line, clipped away; the "·" that
      starts a line sits in the negative margin, clipped too. */
@@ -2494,34 +2545,47 @@ const FULL_STYLE = `
   .stats span { white-space: nowrap; }
   .stats span::before { content: "·"; display: inline-block; width: 10px; text-align: center; }
   /* Scene colours, day and night. */
-  .scene .links line { stroke: var(--mc-accent); stroke-width: 1.8; fill: none; stroke-linecap: round; stroke-dasharray: 2 5; }
-  .scene .links line.down { stroke: var(--mc-alert); }
-  .scene .devs circle { fill: #ffffff; stroke: var(--mc-ok); stroke-width: 1.8; }
-  .scene .devs circle.down { stroke: var(--mc-alert); }
-  .scene .glyphs path { fill: #4a5563; } .scene .glyphs path.down { fill: var(--mc-alert); }
-  .scene .hub { fill: #ffffff; stroke: var(--mc-accent); stroke-width: 2; } .scene .hub-logo { fill: var(--mc-accent); }
-  .night .scene .devs circle, .night .scene .hub { fill: #2f2c5c; }
-  .night .scene .glyphs path:not(.down) { fill: #d4d6ec; }
-  .night .scene .links line:not(.down), .night .scene .hub { stroke: #8d8bf0; } .night .scene .hub-logo { fill: #b9b7ff; }
+  .scene .house { fill: rgba(255,255,255,.55); stroke: var(--wall); stroke-width: 1.6; }
+  .night .scene .house { fill: rgba(255,255,255,.03); }
+  .scene .floor { stroke: var(--wall); stroke-width: 1; stroke-dasharray: 3 3; }
+  .scene .links line { stroke: var(--line); stroke-width: 1.2; stroke-opacity: .55; }
+  .scene .links line.down { stroke: var(--mc-alert); stroke-opacity: .8; stroke-dasharray: 2 3; }
+  .scene .pkt { fill: var(--line); animation: mc-pkt 2s linear infinite; }
+  .scene .dev circle { fill: var(--dev-bg); stroke: var(--dev-st); stroke-width: 1.4; }
+  .scene .dev path { fill: var(--line); }
+  .scene .dev.down circle { stroke: var(--mc-alert); } .scene .dev.down path { fill: var(--mc-alert); }
+  .scene .dev .alarm { fill: var(--mc-alert); stroke: none; }
+  .scene .hub { fill: var(--line); } .scene .hub-logo { fill: #ffffff; }
+  .scene .ping { fill: none; stroke: var(--line); stroke-width: 1; transform-box: fill-box; transform-origin: center; animation: mc-ping 2s ease-out infinite; }
   /* ── Animations (each one a divisor of 6 s) ── */
-  .scene .links .flow { animation: mc-flow 1.5s linear infinite; }
   .scene .blink { animation: mc-blink 1.5s ease-in-out infinite; }
-  @keyframes mc-flow { to { stroke-dashoffset: -21; } }
+  @keyframes mc-pkt { from { offset-distance: 0%; opacity: 0; } 15% { opacity: 1; } 85% { opacity: 1; } to { offset-distance: 100%; opacity: 0; } }
+  @keyframes mc-ping { from { transform: scale(1); opacity: .9; } to { transform: scale(2.6); opacity: 0; } }
   @keyframes mc-blink { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
-  @keyframes mc-pulse { 0%, 100% { opacity: .55; } 50% { opacity: 1; } }
+  @keyframes mc-slide { to { background-position: 24px 50%, 0 50%; } }
   @media (prefers-reduced-motion: reduce) {
-    .scene *, .strip .packets { animation: none !important; }
+    .scene *, .strip { animation: none !important; }
+    .scene .pkt, .scene .ping { display: none; }
   }
-  /* A narrow card keeps the gradient and the strip for its texts: no scene. */
+  /* A narrow card keeps the sky and the strip for its texts: no scene. */
   @container (max-width: 300px) {
     .banner .scene { display: none; }
-    .head { right: 0; }
+    .head { right: var(--btn-w, 0px); }
   }
 
   /* ── Classic header (illustration: false) ── */
   .header { display: flex; align-items: center; gap: 10px; padding: 12px 14px 0; }
-  .header .badge { color: var(--mc-accent); background: color-mix(in srgb, var(--mc-accent) 16%, transparent); box-shadow: none; }
+  .header .badge { background: color-mix(in srgb, var(--bc) 16%, transparent); box-shadow: none; }
   .header .stats { color: var(--secondary-text-color); }
+`;
+
+const FULL_STYLE = `
+  /* Status pill: the state colour on a tint, the text mixed with the text colour to stay readable. */
+  .chip { display: inline-flex; align-items: center; gap: 4px; padding: 1px 8px; border-radius: 12px; font-size: 11px; font-weight: 500;
+          line-height: 16px; white-space: nowrap; min-width: 0; max-width: 100%; box-sizing: border-box; overflow: hidden; flex: 0 1 auto;
+          background: color-mix(in srgb, var(--c) 15%, transparent); color: color-mix(in srgb, var(--c) 40%, var(--primary-text-color, #212121)); }
+  .chip .txt { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--c); flex: none; }
 
   /* ── Status chips, fabrics on the right ── */
   .status { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 8px; padding: 10px 12px 0; min-width: 0; }
@@ -2531,9 +2595,8 @@ const FULL_STYLE = `
   /* ── Thread network and nodes: 56 px tiles, the size of Home Assistant's Tile card ── */
   .content { padding: 10px 12px 12px; display: flex; flex-direction: column; gap: 8px; }
   .grid { display: grid; grid-template-columns: repeat(var(--cols, 2), minmax(0, 1fr)); gap: 8px; }
-  /* Under 460 px (a phone, a narrow column) two tiles leave the name a few letters: one node per row, its transport
-     tag kept. */
-  @container (max-width: 459px) { .grid { grid-template-columns: minmax(0, 1fr); } }
+  /* Under 390 px (a phone, a narrow column) two tiles leave the name a few letters: one node per row. */
+  @container (max-width: 389px) { .grid { grid-template-columns: minmax(0, 1fr); } }
   .tile { all: unset; position: relative; box-sizing: border-box; cursor: pointer; min-width: 0; min-height: 56px;
           display: flex; align-items: center; gap: 10px; padding: 8px 10px 8px 8px; border-radius: 12px; --t: var(--mc-ok);
           background: var(--secondary-background-color, #f1f1f1); transition: background .2s; }
@@ -2549,13 +2612,19 @@ const FULL_STYLE = `
   .sdot { position: absolute; right: -1px; bottom: -1px; width: 10px; height: 10px; border-radius: 50%; background: var(--t);
           box-shadow: 0 0 0 2px var(--secondary-background-color, #f1f1f1); }
   .txt { flex: 1 1 auto; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-  .tname { font-size: 14px; font-weight: 500; line-height: 1.25; color: var(--primary-text-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  /* The name has the tile's width (the transport tag is on the line under it) and goes on to a second line rather than
+     be cut; only a name longer than two lines ends with "…". */
+  .tname { font-size: 14px; font-weight: 500; line-height: 1.25; color: var(--primary-text-color); overflow: hidden; overflow-wrap: break-word;
+           display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; }
+  /* The state line, then the transport tag after it, or under it when both do not fit on the line. */
+  .tsub { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 6px; min-width: 0; }
+  .tsub > .tstate { flex: 0 1 auto; min-width: 0; }
   /* A reading is never cut short: on a narrow tile it goes on to a second line, between its words only (a word too
      long for its line ends with "…"); the name, a label, keeps its ellipsis. */
   .tstate { font-size: 12px; line-height: 1.25; color: var(--secondary-text-color); overflow: hidden; text-overflow: ellipsis; }
   .tile:not(.lvl-ok) .tstate { color: var(--t); }
   /* Transport tag: Thread blue, Wi-Fi purple, Ethernet grey. */
-  .tag { flex: none; padding: 1px 6px; border-radius: 12px; font-size: 11px; font-weight: 500; line-height: 16px; white-space: nowrap;
+  .tag { flex: none; padding: 0 6px; border-radius: 10px; font-size: 11px; font-weight: 500; line-height: 15px; white-space: nowrap;
          background: color-mix(in srgb, var(--c) 15%, transparent); color: color-mix(in srgb, var(--c) 40%, var(--primary-text-color, #212121)); }
   .tag.thread { --c: var(--mc-thread); } .tag.wifi { --c: var(--mc-wifi); }
   .tag.ethernet { --c: var(--mc-ethernet); background: color-mix(in srgb, var(--c) 18%, transparent); color: color-mix(in srgb, var(--c) 25%, var(--primary-text-color, #212121)); }
@@ -2590,29 +2659,15 @@ const FULL_STYLE = `
            color: var(--secondary-text-color); box-shadow: inset 0 0 0 1px var(--divider-color, rgba(127,127,127,.3)); }
   .close:hover { color: var(--primary-text-color); background: color-mix(in srgb, var(--secondary-text-color) 12%, transparent); }
   .close .icon { width: 16px; height: 16px; }
-  .mchips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .mchips { display: flex; flex-wrap: wrap; gap: 6px; } .mchips .tag { align-self: stretch; display: inline-flex; align-items: center; padding: 1px 8px; border-radius: 12px; }
   .facts { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 5px 12px; margin: 0; font-size: 13px; }
   .facts dt { color: var(--secondary-text-color); }
   .facts dd { margin: 0; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
   .modal .actions { margin-top: 0; }
 `;
 
-// The mini card: a 40 px badge beside the title, the status and the chips, like the other ha-* mini cards.
-const MINI_STYLE = `
-  ha-card { padding: 12px; }
-  .mini { display: flex; align-items: flex-start; gap: 10px; }
-  .badge { flex: none; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center;
-           background: color-mix(in srgb, var(--c) 16%, transparent); color: var(--c); }
-  .badge .icon { width: 24px; height: 24px; }
-  /* The badge keeps the full card's size (40 px, icon 24 px): the body is at least as tall, a lone title line centred
-     beside it. */
-  .body { flex: 1; min-width: 0; min-height: 40px; display: flex; flex-direction: column; justify-content: center; gap: 4px; }
-  .mhead { display: flex; align-items: center; gap: 8px; }
-  .title { flex: 1 1 0; min-width: 5ch; font-size: 16px; font-weight: 500; line-height: 1.25; color: var(--primary-text-color);
-           white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .st { flex: 0 1 auto; min-width: 0; position: relative; display: inline-flex; align-items: center;
-        margin-left: auto; font-size: 11px; font-weight: 500; color: var(--c); }
-  .pt { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+// The mini cards' chips row.
+const MINI_CHIPS_STYLE = `
   .rs { display: flex; flex-wrap: wrap; gap: 2px 4px; margin-left: -4px; }
   .rs:empty { display: none; }
   /* A chip is plain (icon and text) until it needs a look: then a tinted pill. It never runs past the card. */
@@ -2623,26 +2678,54 @@ const MINI_STYLE = `
   .r > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
   .r.pill { color: var(--t); background: color-mix(in srgb, var(--t) 14%, transparent); }
   .r.alert { --t: var(--mc-alert); } .r.warn { --t: var(--mc-warn); }
-  .zoom { all: unset; flex: none; cursor: pointer; width: 24px; height: 24px; margin: -4px -4px -4px 0; border-radius: 50%;
+`;
+
+// The mini card: a 40 px badge beside the title, the status and the chips, like the other ha-* mini cards.
+const MINI_STYLE = `
+  ha-card { padding: 12px; }
+  .mini { display: flex; align-items: flex-start; gap: 10px; }
+  .badge { flex: none; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; --bc: var(--mc-accent);
+           background: color-mix(in srgb, var(--bc) 16%, transparent); color: var(--bc); }
+  .badge.s-warn { --bc: var(--mc-warn); } .badge.s-alert { --bc: var(--mc-alert); } .badge.s-na { --bc: var(--mc-idle); }
+  .badge .icon { width: 24px; height: 24px; }
+  /* The badge keeps the full card's size (40 px, icon 24 px): the body is at least as tall, a lone title line centred
+     beside it. */
+  .body { flex: 1; min-width: 0; min-height: 40px; display: flex; flex-direction: column; justify-content: center; gap: 4px; }
+  .mhead { display: flex; align-items: center; gap: 8px; }
+  .title { flex: 0 1 auto; min-width: 4.5ch; font-size: 16px; font-weight: 500; line-height: 1.25; color: var(--primary-text-color);
+           white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .mhead > .bst { flex: none; }
+  .mhead > .zoom { margin-left: auto; }
+  /* The whole title and the pill's whole label do not fit on one row (measured, see _fitPill): the pill on a line of
+     its own under the title. */
+  .mhead.below { flex-wrap: wrap; row-gap: 4px; }
+  .mhead.below > .title { flex: 1 1 calc(100% - 32px); }
+  .mhead.below:not(:has(> .zoom)) > .title { flex-basis: 100%; }
+  .mhead.below > .bst { order: 3; }
+  .mhead.dot-only > .bst { padding: 4px; } .mhead.dot-only > .bst .txt { display: none; }
+${MINI_CHIPS_STYLE}  .zoom { all: unset; flex: none; cursor: pointer; width: 24px; height: 24px; margin: -4px -4px -4px 0; border-radius: 50%;
           display: grid; place-items: center; color: var(--secondary-text-color); }
   .zoom .icon { width: 16px; height: 16px; }
   .zoom:hover { background: color-mix(in srgb, var(--mc-idle) 16%, transparent); color: var(--primary-text-color); }
   .zoom:focus-visible { outline: 2px solid var(--primary-color, #03a9f4); outline-offset: 1px; }
-  /* Under 200 px the status is only its coloured dot, its text kept for screen readers. */
+  /* Under 200 px the status pill is only its coloured dot (PILL_STYLE), its text kept in its title and aria-label. */
   @container (max-width: 200px) {
-    .st .pt { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
-    .st { flex: none; width: 14px; height: 18px; justify-content: center; }
-    .st::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--c); }
     /* The title keeps a few letters beside the dot and the detail button (6 columns on a phone). */
     .mhead { gap: 4px; }
     .title { min-width: 2ch; }
   }
 `;
 
+// The illustrated mini card: the banner, the status (a dot of its colour) under the title, the chips row below.
+const MINI_BANNER_STYLE = `
+${MINI_CHIPS_STYLE}  .rs { padding: 8px 10px 10px 8px; margin-left: 0; }
+`;
+
 // The zoomed mini card: the full card, with the detail button over its banner.
 const ZOOM_STYLE = `
   .zoom { all: unset; position: absolute; z-index: 2; top: 5px; right: 5px; cursor: pointer; width: 24px; height: 24px; border-radius: 50%;
-          display: grid; place-items: center; color: #4b4680; background: rgba(255,255,255,.55); box-shadow: inset 0 0 0 1px rgba(255,255,255,.7); }
+          display: grid; place-items: center; color: #33506b; background: rgba(255,255,255,.55); box-shadow: inset 0 0 0 1px rgba(255,255,255,.7);
+          backdrop-filter: blur(4px); }
   .zoom:hover { background: rgba(255,255,255,.75); }
   .zoom.on-night { color: #ffffff; background: rgba(255,255,255,.12); box-shadow: inset 0 0 0 1px rgba(255,255,255,.2); }
   .zoom.on-night:hover { background: rgba(255,255,255,.22); }
@@ -2731,12 +2814,16 @@ class MatterCard extends HTMLElement {
     // The durations ("Unavailable · 12 min") follow the clock: checked every minute.
     clearInterval(this._timer);
     this._timer = setInterval(() => this._hass && this._config && (this.hass = this._hass), 60000);
+    if (!this._fitObserver && typeof ResizeObserver === "function") this._fitObserver = new ResizeObserver(() => this._fitPill());
+    this._fitObserver?.observe(this);
+    document.fonts?.ready?.then(() => this._fitPill());
     this._update();
   }
 
   disconnectedCallback() {
     store.cards.delete(this);
     this._outsideWatch?.off();
+    this._fitObserver?.disconnect();
     clearInterval(this._timer);
     if (this._routers) {
       this._routers = false;
@@ -2817,6 +2904,7 @@ class MatterCard extends HTMLElement {
       this._html = html;
       morph(this.shadowRoot, html);
     }
+    this._fitPill();
   }
 
   // The nodes, sorted (by name, or issues first), their summary, fabrics and Thread network.
@@ -2849,11 +2937,13 @@ class MatterCard extends HTMLElement {
     this._thread = threadOf(infos, preferredDataset(), store.routers.seen ? [...store.routers.map.values()] : null, h);
   }
 
-  // Night banner: forced by illustration_theme, else the dark theme.
+  // Night banner: forced by illustration_theme, else the sun below the horizon or Home Assistant's dark theme (dark mode alone without a valid sun.sun).
   _night() {
     const mode = this._config.illustration_theme;
     if (mode === "night") return true;
     if (mode === "day") return false;
+    const sun = this._hass?.states?.["sun.sun"]?.state;
+    if (sun === "below_horizon" || sun === "above_horizon") return sun === "below_horizon" || !!this._hass?.themes?.darkMode;
     return !!this._hass?.themes?.darkMode;
   }
 
@@ -2944,22 +3034,79 @@ class MatterCard extends HTMLElement {
     return parts;
   }
 
+  // The network's status, the colour of the Matter badge: an unreachable node first, then a low battery.
+  _level() {
+    const s = this._summary;
+    return !s.total ? "na" : s.unavailable ? "alert" : s.lowBattery ? "warn" : "ok";
+  }
+
+  // The status pill: the network's state in the badge's colour (a dot and its label) — no node, how many issues
+  // (an unreachable node or a low battery), else healthy.
+  _pill() {
+    const s = this._summary;
+    const text = !s.total ? this._t("no_nodes") : s.issues ? this._p("issues", s.issues) : this._t("healthy");
+    return `<span class="chip bst s-${this._level()}" role="img" title="${esc(text)}" aria-label="${esc(text)}"><span class="dot"></span><span class="txt">${esc(text)}</span></span>`;
+  }
+
+  // The banner's status pill, measured after each render and on a new width (in every language): it sits on the
+  // title's row, right after the title, only when the whole title and the pill's whole label fit there; otherwise it
+  // takes a line of its own under the subtitle (.below), the title whole on its row (cut only when it does not fit
+  // alone) and the subtitle on one line. When the three lines do not fit in the banner above the ground strip, or
+  // the label does not fit its line, the pill shows its dot alone (.dot-only): beside the title when the whole title
+  // leaves it room, else under the subtitle.
+  _fitPill() {
+    for (const t of this.shadowRoot?.querySelectorAll?.(".head .titles, .header .titles, .mhead") || []) {
+      const row = t.matches(".mhead") ? t : t.querySelector(".trow");
+      const chips = row ? [...row.querySelectorAll(":scope > .bst")] : [];
+      if (!chips[0]?.getBoundingClientRect) continue;
+      t.classList.remove("below", "dot-only");
+      const name = row.querySelector(".name, .title");
+      const gap = parseFloat(getComputedStyle(row).columnGap) || 0;
+      const outer = (c) => c.getBoundingClientRect().width + (parseFloat(getComputedStyle(c).marginLeft) || 0) + (parseFloat(getComputedStyle(c).marginRight) || 0);
+      const others = [...row.children].filter((c) => c !== name && !chips.includes(c) && c.getClientRects().length);
+      const room = row.getBoundingClientRect().width - others.reduce((w, c) => w + outer(c) + gap, 0);
+      const title = name && getComputedStyle(name).display !== "none" ? textWidth(name) + gap : 0;
+      const pills = () => chips.reduce((w, c) => w + c.getBoundingClientRect().width, gap * (chips.length - 1));
+      if (title + pills() <= room) continue;
+      t.classList.add("below");
+      const banner = t.closest(".banner") || t;
+      const ground = banner.querySelector(".strip");
+      const floor = ground ? ground.getBoundingClientRect().top : banner.getBoundingClientRect().bottom;
+      const box = t.getBoundingClientRect();
+      const whole = chips.every((c) => {
+        const tx = c.querySelector(".txt");
+        return !tx || tx.scrollWidth <= tx.clientWidth + 0.5;
+      });
+      if (whole && box.bottom <= floor + 0.5 && box.top >= banner.getBoundingClientRect().top - 0.5) continue;
+      t.classList.add("dot-only");
+      if (title + pills() <= room) t.classList.remove("below");
+    }
+  }
+
+  _badgeHtml() {
+    return `<div class="badge s-${this._level()}">${matterLogo()}</div>`;
+  }
+
+  _bannerOpen() {
+    const night = this._night();
+    return `<div class="banner${night ? " night" : ""}">
+      ${sceneSvg(this._summary.unavailable > 0)}
+      <div class="strip"></div>`;
+  }
+
   _titleBlock() {
     const stats = this._statsText();
-    return `<div class="badge">${matterLogo()}</div>
+    return `${this._badgeHtml()}
       <div class="titles">
-        <div class="name">${esc(this._config.title || this._t("title"))}</div>
-        <div class="stats">${stats.map((s) => `<span>${esc(s)}</span>`).join("")}</div>
+        <div class="trow"><div class="name">${esc(this._config.title || this._t("title"))}</div>${this._pill()}</div>
+        <div class="stats" title="${esc(stats.join(" · "))}">${stats.map((s) => `<span>${esc(s)}</span>`).join("")}</div>
       </div>`;
   }
 
   _header() {
     if (this._config.illustration === false) return `<div class="header">${this._titleBlock()}${this._zoomButton("plain")}</div>`;
-    const night = this._night();
-    return `<div class="banner${night ? " night" : ""}">
-      ${sceneSvg(this._summary.unavailable > 0)}
-      <div class="strip"><div class="packets"></div></div>
-      <div class="head">${this._titleBlock()}</div>${this._zoomButton(night ? "on-night" : "")}
+    return `${this._bannerOpen()}
+      <div class="head">${this._titleBlock()}</div>${this._zoomButton(this._night() ? "on-night" : "")}
     </div>`;
   }
 
@@ -2994,8 +3141,7 @@ class MatterCard extends HTMLElement {
     const label = [i.name, state, TRANSPORTS.includes(i.transport) ? this._t(i.transport) : ""].filter(Boolean).join(", ");
     return `<div class="tile lvl-${i.level}" role="button" tabindex="0" data-key="n-${esc(i.id)}" data-node="${esc(i.id)}" aria-label="${esc(label)}">
       <span class="ic">${this._iconHtml(i.icon)}<span class="sdot"></span></span>
-      <span class="txt"><span class="tname">${esc(i.name)}</span><span class="tstate">${esc(state)}</span></span>
-      ${this._tag(i.transport)}
+      <span class="txt"><span class="tname" title="${esc(i.name)}">${esc(i.name)}</span><span class="tsub"><span class="tstate">${esc(state)}</span>${this._tag(i.transport)}</span></span>
     </div>`;
   }
 
@@ -3010,7 +3156,7 @@ class MatterCard extends HTMLElement {
 
   _render() {
     if (!this._infos.length && !Object.values(this._hass?.devices || {}).some(isMatterDevice)) return this._noDevices();
-    return `<style>${COMMON_STYLE}${FULL_STYLE}${this._extraStyle()}</style>
+    return `<style>${COMMON_STYLE}${BANNER_STYLE}${FULL_STYLE}${this._extraStyle()}</style>
       <ha-card style="--cols:${this._cols()}">
         ${this._header()}
         ${this._statusRow()}
@@ -3143,7 +3289,7 @@ class MatterMiniCard extends MatterCard {
   }
 
   getCardSize() {
-    return this._zoomed ? super.getCardSize() : 2;
+    return this._zoomed ? super.getCardSize() : this._config?.illustration === false ? 2 : 3;
   }
 
   getGridOptions() {
@@ -3188,25 +3334,35 @@ class MatterMiniCard extends MatterCard {
     if (this._zoomed) return super._render();
     if (!this._infos.length && !Object.values(this._hass?.devices || {}).some(isMatterDevice)) return this._noDevices();
     const s = this._summary;
-    const level = !s.total ? "na" : s.issues ? "warn" : "ok";
-    const status = !s.total ? this._t("no_nodes") : s.issues ? this._p("issues", s.issues) : this._t("healthy");
     const chips = [];
     const TRANSPORT_ICONS = { thread: ICONS.thread, wifi: ICONS.wifi, ethernet: ICONS.bridge };
     for (const tr of TRANSPORTS) if (s.count[tr]) chips.push(this._miniChip(TRANSPORT_ICONS[tr], this._t(`count_${tr}`, { n: this._num(s.count[tr]) })));
     if (s.unavailable) chips.push(this._miniChip(ICONS.offline, this._p("unavailable", s.unavailable), "alert"));
     if (s.lowBattery) chips.push(this._miniChip(ICONS.battery, this._p("low_battery", s.lowBattery), "warn"));
-    return `<style>${COMMON_STYLE}${MINI_STYLE}</style>
+    const title = esc(this._config.title || this._t("matter"));
+    if (this._config.illustration === false)
+      return `<style>${COMMON_STYLE}${PILL_STYLE}${MINI_STYLE}</style>
       <ha-card>
-        <div class="mini ${level}">
-          <div class="badge">${matterLogo()}</div>
+        <div class="mini s-${this._level()}">
+          ${this._badgeHtml()}
           <div class="body">
             <div class="mhead">
-              <span class="title">${esc(this._config.title || this._t("matter"))}</span>
-              <span class="st" title="${esc(status)}"><span class="pt">${esc(status)}</span></span>
+              <span class="title">${title}</span>${this._pill()}
               ${this._zoomButton()}
             </div>
             <div class="rs">${chips.join("")}</div>
           </div>
+        </div>
+      </ha-card>`;
+    // The illustrated mini card: the full card's banner, its status pill after the title, the chips below.
+    return `<style>${COMMON_STYLE}${BANNER_STYLE}${MINI_BANNER_STYLE}${ZOOM_STYLE}</style>
+      <ha-card>
+        <div class="mini">
+          ${this._bannerOpen()}
+            <div class="head">${this._badgeHtml()}<div class="titles"><div class="trow"><div class="name">${title}</div>${this._pill()}</div></div></div>
+            ${this._zoomButton(this._night() ? "on-night" : "")}
+          </div>
+          <div class="rs">${chips.join("")}</div>
         </div>
       </ha-card>`;
   }
