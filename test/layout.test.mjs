@@ -102,6 +102,15 @@ const measure = async (cases) => {
           tileIcon: tileIcon ? Math.round(rect(tileIcon).width) : null,
           modalTop: modal ? rect(modal).top - card.top : null,
           modalOut: modal ? rect(modal).right > card.right + 0.5 || rect(modal).left < card.left - 0.5 : false,
+          pill: (() => {
+            const p = sr.querySelector(".bst");
+            const tx = p?.querySelector(".txt");
+            if (!tx || !shown(tx)) return null;
+            const nm = rect(name);
+            const pr = rect(p);
+            return { cut: tx.scrollWidth - tx.clientWidth, label: p.getAttribute("aria-label"), beside: pr.top < nm.bottom - 2,
+                     centred: Math.abs((pr.top + pr.bottom) / 2 - (nm.top + nm.bottom) / 2) <= 2 };
+          })(),
         };
         box.remove();
         return r;
@@ -148,5 +157,22 @@ test("the node popup opens at the top of the card and stays in it", { timeout: 6
     const at = `${c.type} ${c.lang} ${c.theme} ${c.width}px`;
     assert.ok(r.modalTop !== null && r.modalTop <= 12, `popup top ${r.modalTop}: ${at}`);
     assert.equal(r.modalOut, false, `popup outside the card: ${at}`);
+  });
+});
+
+test("the status pill shows its whole label from 245 px up, centred on the title when beside it", { timeout: 180000 }, async (t) => {
+  if (skip) return t.skip(skip);
+  const cases = [
+    ...matrix([{ type: "matter-card", config: {} }, { type: "matter-card", config: { illustration: false } }], [245, 300, 400, 500]),
+    ...matrix([{ type: "matter-mini-card", config: {} }, { type: "matter-mini-card", config: { illustration: false } }], [245, 300, 400, 500]),
+    ...matrix([{ type: "matter-mini-card", config: {}, zoom: true }], [245, 300, 400, 500]),
+  ];
+  const results = await measure(cases);
+  results.forEach((r, i) => {
+    const c = cases[i];
+    const at = `${c.type} ${JSON.stringify(c.config)}${c.zoom ? " zoomed" : ""} ${c.lang} ${c.theme} ${c.width}px`;
+    assert.ok(r.pill, `no pill label: ${at}`);
+    assert.ok(r.pill.cut <= 0.5, `pill "${r.pill.label}" cut by ${r.pill.cut}px: ${at}`);
+    if (r.pill.beside) assert.ok(r.pill.centred, `pill not centred on the title: ${at}`);
   });
 });

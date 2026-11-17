@@ -5,7 +5,8 @@
 ### Features
 - Illustrated header, the same on both cards (90 px): a house section with the Matter hub at its centre linked to six devices, packets travelling along the links and a pulsing ping around the hub, on a 10 px purple Matter network ground strip edge to edge (day and night). An unreachable node turns its device and link red, the device blinking.
 - The Matter badge's colour follows the network's status (healthy purple, low battery amber, unreachable node red, no node grey), day and night, on the full and mini cards and in the classic header.
-- The mini card gets the full card's banner (title and status on the sky, the scene at the right, its detail button over it), with its chips below; `illustration: false` keeps its compact layout.
+- The mini card gets the full card's banner (title and status pill on the sky, the scene at the right, its detail button in the corner), with its chips below; `illustration: false` keeps its compact layout.
+- A status pill after the title on both cards and both headers (*Healthy*, *2 issues*, *No devices*): a dot and its label in the badge's colour; on a line of its own under the subtitle when the title row is too narrow, its dot alone on the narrowest cards. The mini card's expand / collapse button is a 24 px frosted round in the banner's top-right corner, the scene standing left of it.
 - Night banner when the sun is below the horizon (`sun.sun`), else with the dark theme; still forced with `illustration_theme: day | night`.
 
 ## 1.0.0 - 2026-11-16

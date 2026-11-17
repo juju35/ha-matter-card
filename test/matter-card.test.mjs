@@ -307,12 +307,13 @@ test("the mini card: the status, the transport chips and the issues", async () =
   const txt = text(html);
   assert.match(txt, /Matter 2 issues/);
   assert.match(txt, /5 Thread 2 Wi-Fi 1 Ethernet 1 unavailable 1 low battery/);
-  assert.match(html, /class="mini warn"/);
+  // The status pill takes the badge's colour: an unreachable node is an alert.
+  assert.match(html, /<div class="trow"><div class="name">Matter<\/div><span class="chip bst s-alert" role="img" title="2 issues" aria-label="2 issues">/);
   assert.match(html, /class="r pill alert"/);
   assert.doesNotMatch(html, /data-node=/);
   const ok = render(card(mc.MatterMiniCard, {}, await withData(mockHass({ healthy: true }))));
   assert.match(text(ok), /Matter Healthy/);
-  assert.match(ok, /class="mini ok"/);
+  assert.match(ok, /class="chip bst s-ok"/);
 });
 
 test("the mini card's detail button unfolds the full card; a click outside folds it back", () => {

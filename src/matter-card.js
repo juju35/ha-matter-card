@@ -2475,6 +2475,20 @@ const COMMON_STYLE = `
   .warning { padding: 16px; color: color-mix(in srgb, var(--mc-warn) 40%, var(--primary-text-color, #212121)); }
 `;
 
+// The status pill (a dot and its label in the badge's colour), on the banner, the classic header and the mini card.
+const PILL_STYLE = `
+  .s-ok { --c: var(--mc-accent); } .s-warn { --c: var(--mc-warn); } .s-alert { --c: var(--mc-alert); } .s-na { --c: var(--mc-idle); }
+  .night .bst.s-ok { --c: #b9b7ff; }
+  .bst { flex: none; display: inline-flex; align-items: center; gap: 5px; padding: 1px 8px; border-radius: 12px; font-size: 11px; font-weight: 500;
+         line-height: 16px; white-space: nowrap; box-sizing: border-box; max-width: 100%; overflow: hidden;
+         background: color-mix(in srgb, var(--c) 15%, transparent); color: color-mix(in srgb, var(--c) 40%, var(--primary-text-color, #212121)); }
+  .banner .bst { background: color-mix(in srgb, var(--c) 18%, rgba(255,255,255,.78)); color: color-mix(in srgb, var(--c) 45%, #0d2a45); }
+  .banner.night .bst { background: color-mix(in srgb, var(--c) 30%, rgba(8,18,38,.55)); color: color-mix(in srgb, var(--c) 35%, #ffffff); }
+  .bst .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--c); flex: none; }
+  .bst .txt { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+  @container (max-width: 200px) { .bst { padding: 4px; } .bst .txt { display: none; } }
+`;
+
 // The illustrated header, the same on both cards: 90 px, the title on the lavender sky at its left, the scene at its
 // right, a 10 px ground strip edge to edge at its bottom (a network line with nodes, packets sliding along it).
 const BANNER_STYLE = `
@@ -2483,7 +2497,9 @@ const BANNER_STYLE = `
             background: linear-gradient(90deg, #f7f6ff 0%, #ecebfd 34%, #d8d5fa 70%, #c6c2f5 100%); }
   .banner.night { --sky-text: #ffffff; --sky-muted: rgba(255,255,255,.78); --line: #a9a3ff; --dev-bg: #211e47; --dev-st: #3e3a7a; --wall: #3a4456;
                   background: linear-gradient(90deg, #26234f 0%, #211e47 36%, #1b1940 72%, #161435 100%); }
-  .banner .scene { position: absolute; right: 0; bottom: var(--strip-h); height: calc(100% - var(--strip-h)); width: var(--scene-w); overflow: hidden; }
+  /* With the detail button in its top-right corner, the scene stands left of it. */
+  .banner:has(> .zoom) { --btn-w: 30px; }
+  .banner .scene { position: absolute; right: var(--btn-w, 0px); bottom: var(--strip-h); height: calc(100% - var(--strip-h)); width: var(--scene-w); overflow: hidden; }
   /* Ground strip: the Matter network line, its nodes every 24 px. */
   .strip { position: absolute; left: 0; right: 0; bottom: 0; height: var(--strip-h);
            background-color: color-mix(in srgb, var(--mesh) 18%, #e9eef5);
@@ -2491,7 +2507,7 @@ const BANNER_STYLE = `
            background-size: 24px 100%, 100% 1px; background-repeat: repeat-x, no-repeat; background-position: 0 50%, 0 50%;
            box-shadow: inset 0 2px 0 color-mix(in srgb, var(--mesh) 50%, #fff); animation: mc-slide 2s linear infinite; }
   .night .strip { background-color: color-mix(in srgb, var(--mesh) 20%, #1a202c); box-shadow: inset 0 2px 0 color-mix(in srgb, var(--mesh) 55%, #1a202c); }
-  .head { position: absolute; z-index: 1; left: 0; top: 0; bottom: var(--strip-h); box-sizing: border-box; right: calc(var(--scene-w) + 4px);
+  .head { position: absolute; z-index: 1; left: 0; top: 0; bottom: var(--strip-h); box-sizing: border-box; right: calc(var(--scene-w) + var(--btn-w, 0px) + 4px);
           display: flex; align-items: center; gap: 10px; padding: 6px 6px 6px 12px; min-width: 0; color: var(--sky-text); }
   /* The Matter badge: its colour is the network's status (healthy accent, a low battery amber, an unreachable node red,
      no node grey). */
@@ -2501,7 +2517,20 @@ const BANNER_STYLE = `
   .badge.s-warn, .night .badge.s-warn { --bc: var(--mc-warn); } .badge.s-alert, .night .badge.s-alert { --bc: var(--mc-alert); }
   .badge.s-na, .night .badge.s-na { --bc: var(--mc-idle); }
   .badge .icon { width: 24px; height: 24px; }
-  .titles { flex: 1 1 0; min-width: 0; overflow: hidden; }
+  .titles { flex: 1 1 0; min-width: 0; overflow: hidden; display: flex; flex-direction: column; }
+  /* The title row: the name, then the status pill right after it (the name gives way first, down to 4 characters);
+     when the pill does not fit (measured, see _fitPill) or on a narrow card, it takes a line of its own under the
+     subtitle, and on the narrowest cards only its dot stays. */
+  .trow { display: flex; align-items: center; gap: 8px; min-width: 0; }
+  .trow > .name { flex: 0 1 auto; min-width: 4.5ch; }
+${PILL_STYLE}  .titles.below .trow { display: contents; }
+  .titles.below .bst { order: 2; align-self: flex-start; margin-top: 2px; }
+  .titles.below .stats { order: 1; max-height: 16px; }
+  @container (max-width: 260px) {
+    .trow { display: contents; }
+    .trow > .bst { order: 2; align-self: flex-start; margin-top: 2px; }
+    .titles .stats { order: 1; max-height: 16px; }
+  }
   .name { font-size: 16px; font-weight: 500; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   /* The statistics on two lines at most: a part that does not fit goes to a third line, clipped away; the "·" that
      starts a line sits in the negative margin, clipped too. */
@@ -2534,7 +2563,7 @@ const BANNER_STYLE = `
   /* A narrow card keeps the sky and the strip for its texts: no scene. */
   @container (max-width: 300px) {
     .banner .scene { display: none; }
-    .head { right: 0; }
+    .head { right: var(--btn-w, 0px); }
   }
 
   /* ── Classic header (illustration: false) ── */
@@ -2651,21 +2680,17 @@ const MINI_STYLE = `
      beside it. */
   .body { flex: 1; min-width: 0; min-height: 40px; display: flex; flex-direction: column; justify-content: center; gap: 4px; }
   .mhead { display: flex; align-items: center; gap: 8px; }
-  .title { flex: 1 1 0; min-width: 5ch; font-size: 16px; font-weight: 500; line-height: 1.25; color: var(--primary-text-color);
+  .title { flex: 0 1 auto; min-width: 4.5ch; font-size: 16px; font-weight: 500; line-height: 1.25; color: var(--primary-text-color);
            white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .st { flex: 0 1 auto; min-width: 0; position: relative; display: inline-flex; align-items: center;
-        margin-left: auto; font-size: 11px; font-weight: 500; color: var(--c); }
-  .pt { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .mhead > .bst { flex: none; }
+  .mhead > .zoom { margin-left: auto; }
 ${MINI_CHIPS_STYLE}  .zoom { all: unset; flex: none; cursor: pointer; width: 24px; height: 24px; margin: -4px -4px -4px 0; border-radius: 50%;
           display: grid; place-items: center; color: var(--secondary-text-color); }
   .zoom .icon { width: 16px; height: 16px; }
   .zoom:hover { background: color-mix(in srgb, var(--mc-idle) 16%, transparent); color: var(--primary-text-color); }
   .zoom:focus-visible { outline: 2px solid var(--primary-color, #03a9f4); outline-offset: 1px; }
-  /* Under 200 px the status is only its coloured dot, its text kept for screen readers. */
+  /* Under 200 px the status pill is only its coloured dot (PILL_STYLE), its text kept in its title and aria-label. */
   @container (max-width: 200px) {
-    .st .pt { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
-    .st { flex: none; width: 14px; height: 18px; justify-content: center; }
-    .st::before { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--c); }
     /* The title keeps a few letters beside the dot and the detail button (6 columns on a phone). */
     .mhead { gap: 4px; }
     .title { min-width: 2ch; }
@@ -2674,17 +2699,14 @@ ${MINI_CHIPS_STYLE}  .zoom { all: unset; flex: none; cursor: pointer; width: 24p
 
 // The illustrated mini card: the banner, the status (a dot of its colour) under the title, the chips row below.
 const MINI_BANNER_STYLE = `
-  .st { display: flex; align-items: center; gap: 5px; min-width: 0; font-size: 12px; font-weight: 500; line-height: 16px; color: var(--sky-muted); }
-  .st::before { content: ""; flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--c); }
-  .pt { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-  @container (max-width: 300px) { .head { right: 34px; } }
 ${MINI_CHIPS_STYLE}  .rs { padding: 8px 10px 10px 8px; margin-left: 0; }
 `;
 
 // The zoomed mini card: the full card, with the detail button over its banner.
 const ZOOM_STYLE = `
   .zoom { all: unset; position: absolute; z-index: 2; top: 5px; right: 5px; cursor: pointer; width: 24px; height: 24px; border-radius: 50%;
-          display: grid; place-items: center; color: #4b4680; background: rgba(255,255,255,.55); box-shadow: inset 0 0 0 1px rgba(255,255,255,.7); }
+          display: grid; place-items: center; color: #33506b; background: rgba(255,255,255,.55); box-shadow: inset 0 0 0 1px rgba(255,255,255,.7);
+          backdrop-filter: blur(4px); }
   .zoom:hover { background: rgba(255,255,255,.75); }
   .zoom.on-night { color: #ffffff; background: rgba(255,255,255,.12); box-shadow: inset 0 0 0 1px rgba(255,255,255,.2); }
   .zoom.on-night:hover { background: rgba(255,255,255,.22); }
@@ -2773,12 +2795,15 @@ class MatterCard extends HTMLElement {
     // The durations ("Unavailable · 12 min") follow the clock: checked every minute.
     clearInterval(this._timer);
     this._timer = setInterval(() => this._hass && this._config && (this.hass = this._hass), 60000);
+    if (!this._fitObserver && typeof ResizeObserver === "function") this._fitObserver = new ResizeObserver(() => this._fitPill());
+    this._fitObserver?.observe(this);
     this._update();
   }
 
   disconnectedCallback() {
     store.cards.delete(this);
     this._outsideWatch?.off();
+    this._fitObserver?.disconnect();
     clearInterval(this._timer);
     if (this._routers) {
       this._routers = false;
@@ -2859,6 +2884,7 @@ class MatterCard extends HTMLElement {
       this._html = html;
       morph(this.shadowRoot, html);
     }
+    this._fitPill();
   }
 
   // The nodes, sorted (by name, or issues first), their summary, fabrics and Thread network.
@@ -2994,6 +3020,24 @@ class MatterCard extends HTMLElement {
     return !s.total ? "na" : s.unavailable ? "alert" : s.lowBattery ? "warn" : "ok";
   }
 
+  // The status pill: the network's state in the badge's colour (a dot and its label) — no node, how many issues
+  // (an unreachable node or a low battery), else healthy.
+  _pill() {
+    const s = this._summary;
+    const text = !s.total ? this._t("no_nodes") : s.issues ? this._p("issues", s.issues) : this._t("healthy");
+    return `<span class="chip bst s-${this._level()}" role="img" title="${esc(text)}" aria-label="${esc(text)}"><span class="dot"></span><span class="txt">${esc(text)}</span></span>`;
+  }
+
+  // The pill keeps its whole label: when it does not fit beside the title (already down to four characters), it
+  // takes a line of its own under the subtitle.
+  _fitPill() {
+    const t = this.shadowRoot?.querySelector(".head .titles, .header .titles");
+    if (!t?.classList) return;
+    t.classList.remove("below");
+    const tx = t.querySelector(".bst .txt");
+    if (tx && tx.scrollWidth > tx.clientWidth + 0.5) t.classList.add("below");
+  }
+
   _badgeHtml() {
     return `<div class="badge s-${this._level()}">${matterLogo()}</div>`;
   }
@@ -3009,7 +3053,7 @@ class MatterCard extends HTMLElement {
     const stats = this._statsText();
     return `${this._badgeHtml()}
       <div class="titles">
-        <div class="name">${esc(this._config.title || this._t("title"))}</div>
+        <div class="trow"><div class="name">${esc(this._config.title || this._t("title"))}</div>${this._pill()}</div>
         <div class="stats">${stats.map((s) => `<span>${esc(s)}</span>`).join("")}</div>
       </div>`;
   }
@@ -3246,8 +3290,6 @@ class MatterMiniCard extends MatterCard {
     if (this._zoomed) return super._render();
     if (!this._infos.length && !Object.values(this._hass?.devices || {}).some(isMatterDevice)) return this._noDevices();
     const s = this._summary;
-    const level = !s.total ? "na" : s.issues ? "warn" : "ok";
-    const status = !s.total ? this._t("no_nodes") : s.issues ? this._p("issues", s.issues) : this._t("healthy");
     const chips = [];
     const TRANSPORT_ICONS = { thread: ICONS.thread, wifi: ICONS.wifi, ethernet: ICONS.bridge };
     for (const tr of TRANSPORTS) if (s.count[tr]) chips.push(this._miniChip(TRANSPORT_ICONS[tr], this._t(`count_${tr}`, { n: this._num(s.count[tr]) })));
@@ -3255,26 +3297,25 @@ class MatterMiniCard extends MatterCard {
     if (s.lowBattery) chips.push(this._miniChip(ICONS.battery, this._p("low_battery", s.lowBattery), "warn"));
     const title = esc(this._config.title || this._t("matter"));
     if (this._config.illustration === false)
-      return `<style>${COMMON_STYLE}${MINI_STYLE}</style>
+      return `<style>${COMMON_STYLE}${PILL_STYLE}${MINI_STYLE}</style>
       <ha-card>
-        <div class="mini ${level}">
+        <div class="mini s-${this._level()}">
           ${this._badgeHtml()}
           <div class="body">
             <div class="mhead">
-              <span class="title">${title}</span>
-              <span class="st" title="${esc(status)}"><span class="pt">${esc(status)}</span></span>
+              <span class="title">${title}</span>${this._pill()}
               ${this._zoomButton()}
             </div>
             <div class="rs">${chips.join("")}</div>
           </div>
         </div>
       </ha-card>`;
-    // The illustrated mini card: the full card's banner, its status under the title, the chips below.
+    // The illustrated mini card: the full card's banner, its status pill after the title, the chips below.
     return `<style>${COMMON_STYLE}${BANNER_STYLE}${MINI_BANNER_STYLE}${ZOOM_STYLE}</style>
       <ha-card>
-        <div class="mini ${level}">
+        <div class="mini">
           ${this._bannerOpen()}
-            <div class="head">${this._badgeHtml()}<div class="titles"><div class="name">${title}</div><div class="st" title="${esc(status)}"><span class="pt">${esc(status)}</span></div></div></div>
+            <div class="head">${this._badgeHtml()}<div class="titles"><div class="trow"><div class="name">${title}</div>${this._pill()}</div></div></div>
             ${this._zoomButton(this._night() ? "on-night" : "")}
           </div>
           <div class="rs">${chips.join("")}</div>
