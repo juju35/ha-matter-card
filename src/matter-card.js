@@ -2475,6 +2475,17 @@ const COMMON_STYLE = `
   .warning { padding: 16px; color: color-mix(in srgb, var(--mc-warn) 40%, var(--primary-text-color, #212121)); }
 `;
 
+// The width of an element's whole text in its own font, in fractional pixels (scrollWidth is rounded).
+let textCtx;
+const textWidth = (el) => {
+  const cs = getComputedStyle(el);
+  textCtx ??= document.createElement("canvas").getContext?.("2d");
+  if (!textCtx) return el.scrollWidth;
+  textCtx.font = `${cs.fontStyle} ${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`;
+  const pad = (parseFloat(cs.paddingLeft) || 0) + (parseFloat(cs.paddingRight) || 0);
+  return Math.max(el.scrollWidth, textCtx.measureText(el.textContent.trim()).width + pad);
+};
+
 // The status pill (a dot and its label in the badge's colour), on the banner, the classic header and the mini card.
 const PILL_STYLE = `
   .s-ok { --c: var(--mc-accent); } .s-warn { --c: var(--mc-warn); } .s-alert { --c: var(--mc-alert); } .s-na { --c: var(--mc-idle); }
@@ -2518,19 +2529,15 @@ const BANNER_STYLE = `
   .badge.s-na, .night .badge.s-na { --bc: var(--mc-idle); }
   .badge .icon { width: 24px; height: 24px; }
   .titles { flex: 1 1 0; min-width: 0; overflow: hidden; display: flex; flex-direction: column; }
-  /* The title row: the name, then the status pill right after it (the name gives way first, down to 4 characters);
-     when the pill does not fit (measured, see _fitPill) or on a narrow card, it takes a line of its own under the
-     subtitle, and on the narrowest cards only its dot stays. */
+  /* The title row: the name, then the status pill right after it, when the whole name and the pill's whole label
+     fit there (measured, see _fitPill); otherwise the pill takes a line of its own under the subtitle, which keeps
+     one line, and when that does not fit above the strip (or on the narrowest cards) only its dot stays. */
   .trow { display: flex; align-items: center; gap: 8px; min-width: 0; }
   .trow > .name { flex: 0 1 auto; min-width: 4.5ch; }
 ${PILL_STYLE}  .titles.below .trow { display: contents; }
   .titles.below .bst { order: 2; align-self: flex-start; margin-top: 2px; }
   .titles.below .stats { order: 1; max-height: 16px; }
-  @container (max-width: 260px) {
-    .trow { display: contents; }
-    .trow > .bst { order: 2; align-self: flex-start; margin-top: 2px; }
-    .titles .stats { order: 1; max-height: 16px; }
-  }
+  .titles.dot .bst { padding: 4px; } .titles.dot .bst .txt { display: none; }
   .name { font-size: 16px; font-weight: 500; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   /* The statistics on two lines at most: a part that does not fit goes to a third line, clipped away; the "·" that
      starts a line sits in the negative margin, clipped too. */
@@ -2689,6 +2696,13 @@ const MINI_STYLE = `
            white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .mhead > .bst { flex: none; }
   .mhead > .zoom { margin-left: auto; }
+  /* The whole title and the pill's whole label do not fit on one row (measured, see _fitPill): the pill on a line of
+     its own under the title. */
+  .mhead.below { flex-wrap: wrap; row-gap: 4px; }
+  .mhead.below > .title { flex: 1 1 calc(100% - 32px); }
+  .mhead.below:not(:has(> .zoom)) > .title { flex-basis: 100%; }
+  .mhead.below > .bst { order: 3; }
+  .mhead.dot > .bst { padding: 4px; } .mhead.dot > .bst .txt { display: none; }
 ${MINI_CHIPS_STYLE}  .zoom { all: unset; flex: none; cursor: pointer; width: 24px; height: 24px; margin: -4px -4px -4px 0; border-radius: 50%;
           display: grid; place-items: center; color: var(--secondary-text-color); }
   .zoom .icon { width: 16px; height: 16px; }
@@ -2802,6 +2816,7 @@ class MatterCard extends HTMLElement {
     this._timer = setInterval(() => this._hass && this._config && (this.hass = this._hass), 60000);
     if (!this._fitObserver && typeof ResizeObserver === "function") this._fitObserver = new ResizeObserver(() => this._fitPill());
     this._fitObserver?.observe(this);
+    document.fonts?.ready?.then(() => this._fitPill());
     this._update();
   }
 
@@ -3033,14 +3048,39 @@ class MatterCard extends HTMLElement {
     return `<span class="chip bst s-${this._level()}" role="img" title="${esc(text)}" aria-label="${esc(text)}"><span class="dot"></span><span class="txt">${esc(text)}</span></span>`;
   }
 
-  // The pill keeps its whole label: when it does not fit beside the title (already down to four characters), it
-  // takes a line of its own under the subtitle.
+  // The banner's status pill, measured after each render and on a new width (in every language): it sits on the
+  // title's row, right after the title, only when the whole title and the pill's whole label fit there; otherwise it
+  // takes a line of its own under the subtitle (.below), the title whole on its row (cut only when it does not fit
+  // alone) and the subtitle on one line. When the three lines do not fit in the banner above the ground strip, or
+  // the label does not fit its line, the pill shows its dot alone (.dot): beside the title when the whole title
+  // leaves it room, else under the subtitle.
   _fitPill() {
-    const t = this.shadowRoot?.querySelector(".head .titles, .header .titles");
-    if (!t?.classList) return;
-    t.classList.remove("below");
-    const tx = t.querySelector(".bst .txt");
-    if (tx && tx.scrollWidth > tx.clientWidth + 0.5) t.classList.add("below");
+    for (const t of this.shadowRoot?.querySelectorAll?.(".head .titles, .header .titles, .mhead") || []) {
+      const row = t.matches(".mhead") ? t : t.querySelector(".trow");
+      const chips = row ? [...row.querySelectorAll(":scope > .bst")] : [];
+      if (!chips[0]?.getBoundingClientRect) continue;
+      t.classList.remove("below", "dot");
+      const name = row.querySelector(".name, .title");
+      const gap = parseFloat(getComputedStyle(row).columnGap) || 0;
+      const outer = (c) => c.getBoundingClientRect().width + (parseFloat(getComputedStyle(c).marginLeft) || 0) + (parseFloat(getComputedStyle(c).marginRight) || 0);
+      const others = [...row.children].filter((c) => c !== name && !chips.includes(c) && c.getClientRects().length);
+      const room = row.getBoundingClientRect().width - others.reduce((w, c) => w + outer(c) + gap, 0);
+      const title = name && getComputedStyle(name).display !== "none" ? textWidth(name) + gap : 0;
+      const pills = () => chips.reduce((w, c) => w + c.getBoundingClientRect().width, gap * (chips.length - 1));
+      if (title + pills() <= room) continue;
+      t.classList.add("below");
+      const banner = t.closest(".banner") || t;
+      const ground = banner.querySelector(".strip");
+      const floor = ground ? ground.getBoundingClientRect().top : banner.getBoundingClientRect().bottom;
+      const box = t.getBoundingClientRect();
+      const whole = chips.every((c) => {
+        const tx = c.querySelector(".txt");
+        return !tx || tx.scrollWidth <= tx.clientWidth + 0.5;
+      });
+      if (whole && box.bottom <= floor + 0.5 && box.top >= banner.getBoundingClientRect().top - 0.5) continue;
+      t.classList.add("dot");
+      if (title + pills() <= room) t.classList.remove("below");
+    }
   }
 
   _badgeHtml() {
@@ -3059,7 +3099,7 @@ class MatterCard extends HTMLElement {
     return `${this._badgeHtml()}
       <div class="titles">
         <div class="trow"><div class="name">${esc(this._config.title || this._t("title"))}</div>${this._pill()}</div>
-        <div class="stats">${stats.map((s) => `<span>${esc(s)}</span>`).join("")}</div>
+        <div class="stats" title="${esc(stats.join(" · "))}">${stats.map((s) => `<span>${esc(s)}</span>`).join("")}</div>
       </div>`;
   }
 
