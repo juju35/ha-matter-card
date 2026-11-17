@@ -1,0 +1,26 @@
+{
+  "name": "ha-matter-card",
+  "version": "1.0.0",
+  "description": "Matter and Thread network card for Home Assistant: every Matter node, its transport and its health, under an animated banner.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/juju35/ha-matter-card.git"
+  },
+  "bugs": {
+    "url": "https://github.com/juju35/ha-matter-card/issues"
+  },
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "node scripts/build.mjs",
+    "check": "node scripts/build.mjs && node --check dist/matter-card.js",
+    "test": "node --test test/*.test.mjs",
+    "screenshots": "npm run build && node scripts/screenshots/stills.mjs && node scripts/screenshots/animations.mjs"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "acorn": "^8.19.0",
+    "css-tree": "^3.2.1",
+    "playwright": "^1.65.0"
+  }
+}
