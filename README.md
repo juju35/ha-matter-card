@@ -131,7 +131,7 @@ zoom: true
 |---|---|---|---|
 | `title` | both | `Matter devices` / `Matter` | Card title (the banner's name; the mini card's title) |
 | `sort` | both | `name` | Order of the node tiles: `name`, or `status` for the issues first (unavailable, then low battery) |
-| `columns` | both | `2` | Node tiles per row (1 to 4); a card narrower than 460 px shows one per row |
+| `columns` | both | `2` | Node tiles per row (1 to 4); a card narrower than 390 px shows one per row |
 | `battery_threshold` | both | `20` | A battery below this percentage is a low battery (a battery binary sensor that is on is one too) |
 | `show_thread` | both | `true` | The Thread network tile |
 | `show_commission` | both | `true` | The **Commission device** button (shown to administrators only) |
@@ -217,7 +217,7 @@ For an administrator, the Thread tile shows the preferred dataset of the Thread 
 
 ### Narrow cards
 
-The full card fits down to 8 columns of a sections view (about 208 px on a phone), the mini card down to 6 columns (about 156 px). Under 460 px the node tiles go one per row; under 300 px the banner keeps its sky and ground strip for its texts, without the scene. In a container sized by its content, the cards take a width of 400 px instead of collapsing.
+The full card fits down to 8 columns of a sections view (about 208 px on a phone), the mini card down to 6 columns (about 156 px). Under 390 px the node tiles go one per row; under 300 px the banner keeps its sky and ground strip for its texts, without the scene. In a container sized by its content, the cards take a width of 400 px instead of collapsing.
 
 ## Development
 

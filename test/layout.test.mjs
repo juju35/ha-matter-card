@@ -93,7 +93,11 @@ const measure = async (cases) => {
         const badge = sr.querySelector(".badge");
         const tileIcon = sr.querySelector(".grid .ic");
         const modal = sr.querySelector(".modal");
+        const tiles = [...sr.querySelectorAll(".grid .tile[data-node]")];
         const r = {
+          cols: new Set(tiles.map((n) => Math.round(rect(n).left))).size,
+          cutNames: tiles.map((n) => n.querySelector(".tname")).filter((n) => n.scrollHeight > n.clientHeight + 0.5 || n.scrollWidth > n.clientWidth + 0.5).map((n) => n.textContent),
+          smallText: tiles.flatMap((n) => [...n.querySelectorAll(".tname, .tstate, .tag")]).filter((n) => parseFloat(getComputedStyle(n).fontSize) < 11).map((n) => n.textContent),
           outside,
           under,
           nameWidth: name ? rect(name).width : 0,
@@ -174,5 +178,18 @@ test("the status pill shows its whole label from 245 px up, centred on the title
     assert.ok(r.pill, `no pill label: ${at}`);
     assert.ok(r.pill.cut <= 0.5, `pill "${r.pill.label}" cut by ${r.pill.cut}px: ${at}`);
     if (r.pill.beside) assert.ok(r.pill.centred, `pill not centred on the title: ${at}`);
+  });
+});
+
+test("node tiles: two per row from 400 px, every name whole (the transport tag on the state line), no text under 11 px", { timeout: 120000 }, async (t) => {
+  if (skip) return t.skip(skip);
+  const cases = [...matrix([{ type: "matter-card", config: {} }], [400, 450, 500]), ...matrix([{ type: "matter-card", config: {} }], [245, 300])];
+  const results = await measure(cases);
+  results.forEach((r, i) => {
+    const c = cases[i];
+    const at = `${c.lang} ${c.theme} ${c.width}px`;
+    if (c.width >= 400) assert.equal(r.cols, 2, `tiles per row: ${at}`);
+    assert.deepEqual(r.cutNames, [], `names cut: ${at}`);
+    assert.deepEqual(r.smallText, [], `text under 11 px: ${at}`);
   });
 });

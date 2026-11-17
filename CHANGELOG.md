@@ -10,6 +10,9 @@
 - Night banner when the sun is below the horizon (`sun.sun`) or with the dark theme; still forced with `illustration_theme: day | night`.
 - Night picture with the dark theme even while the sun is up.
 
+### Fixes
+- **Whole device names**: the transport tag (Thread, Wi-Fi, Ethernet) moves to the state line, after the state or under it when both do not fit, so the name has the tile's width and goes on to a second line rather than be cut (« Kids room se… »); the tiles stay two per row down to a 390 px card.
+
 ## 1.0.0 - 2026-11-16
 
 ### Features

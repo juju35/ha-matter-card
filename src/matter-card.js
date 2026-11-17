@@ -2588,9 +2588,8 @@ const FULL_STYLE = `
   /* ── Thread network and nodes: 56 px tiles, the size of Home Assistant's Tile card ── */
   .content { padding: 10px 12px 12px; display: flex; flex-direction: column; gap: 8px; }
   .grid { display: grid; grid-template-columns: repeat(var(--cols, 2), minmax(0, 1fr)); gap: 8px; }
-  /* Under 460 px (a phone, a narrow column) two tiles leave the name a few letters: one node per row, its transport
-     tag kept. */
-  @container (max-width: 459px) { .grid { grid-template-columns: minmax(0, 1fr); } }
+  /* Under 390 px (a phone, a narrow column) two tiles leave the name a few letters: one node per row. */
+  @container (max-width: 389px) { .grid { grid-template-columns: minmax(0, 1fr); } }
   .tile { all: unset; position: relative; box-sizing: border-box; cursor: pointer; min-width: 0; min-height: 56px;
           display: flex; align-items: center; gap: 10px; padding: 8px 10px 8px 8px; border-radius: 12px; --t: var(--mc-ok);
           background: var(--secondary-background-color, #f1f1f1); transition: background .2s; }
@@ -2606,13 +2605,19 @@ const FULL_STYLE = `
   .sdot { position: absolute; right: -1px; bottom: -1px; width: 10px; height: 10px; border-radius: 50%; background: var(--t);
           box-shadow: 0 0 0 2px var(--secondary-background-color, #f1f1f1); }
   .txt { flex: 1 1 auto; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
-  .tname { font-size: 14px; font-weight: 500; line-height: 1.25; color: var(--primary-text-color); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  /* The name has the tile's width (the transport tag is on the line under it) and goes on to a second line rather than
+     be cut; only a name longer than two lines ends with "…". */
+  .tname { font-size: 14px; font-weight: 500; line-height: 1.25; color: var(--primary-text-color); overflow: hidden; overflow-wrap: break-word;
+           display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; }
+  /* The state line, then the transport tag after it, or under it when both do not fit on the line. */
+  .tsub { display: flex; flex-wrap: wrap; align-items: baseline; gap: 2px 6px; min-width: 0; }
+  .tsub > .tstate { flex: 0 1 auto; min-width: 0; }
   /* A reading is never cut short: on a narrow tile it goes on to a second line, between its words only (a word too
      long for its line ends with "…"); the name, a label, keeps its ellipsis. */
   .tstate { font-size: 12px; line-height: 1.25; color: var(--secondary-text-color); overflow: hidden; text-overflow: ellipsis; }
   .tile:not(.lvl-ok) .tstate { color: var(--t); }
   /* Transport tag: Thread blue, Wi-Fi purple, Ethernet grey. */
-  .tag { flex: none; padding: 1px 6px; border-radius: 12px; font-size: 11px; font-weight: 500; line-height: 16px; white-space: nowrap;
+  .tag { flex: none; padding: 0 6px; border-radius: 10px; font-size: 11px; font-weight: 500; line-height: 15px; white-space: nowrap;
          background: color-mix(in srgb, var(--c) 15%, transparent); color: color-mix(in srgb, var(--c) 40%, var(--primary-text-color, #212121)); }
   .tag.thread { --c: var(--mc-thread); } .tag.wifi { --c: var(--mc-wifi); }
   .tag.ethernet { --c: var(--mc-ethernet); background: color-mix(in srgb, var(--c) 18%, transparent); color: color-mix(in srgb, var(--c) 25%, var(--primary-text-color, #212121)); }
@@ -2647,7 +2652,7 @@ const FULL_STYLE = `
            color: var(--secondary-text-color); box-shadow: inset 0 0 0 1px var(--divider-color, rgba(127,127,127,.3)); }
   .close:hover { color: var(--primary-text-color); background: color-mix(in srgb, var(--secondary-text-color) 12%, transparent); }
   .close .icon { width: 16px; height: 16px; }
-  .mchips { display: flex; flex-wrap: wrap; gap: 6px; }
+  .mchips { display: flex; flex-wrap: wrap; gap: 6px; } .mchips .tag { align-self: stretch; display: inline-flex; align-items: center; padding: 1px 8px; border-radius: 12px; }
   .facts { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 5px 12px; margin: 0; font-size: 13px; }
   .facts dt { color: var(--secondary-text-color); }
   .facts dd { margin: 0; overflow-wrap: anywhere; font-variant-numeric: tabular-nums; }
@@ -3096,8 +3101,7 @@ class MatterCard extends HTMLElement {
     const label = [i.name, state, TRANSPORTS.includes(i.transport) ? this._t(i.transport) : ""].filter(Boolean).join(", ");
     return `<div class="tile lvl-${i.level}" role="button" tabindex="0" data-key="n-${esc(i.id)}" data-node="${esc(i.id)}" aria-label="${esc(label)}">
       <span class="ic">${this._iconHtml(i.icon)}<span class="sdot"></span></span>
-      <span class="txt"><span class="tname">${esc(i.name)}</span><span class="tstate">${esc(state)}</span></span>
-      ${this._tag(i.transport)}
+      <span class="txt"><span class="tname" title="${esc(i.name)}">${esc(i.name)}</span><span class="tsub"><span class="tstate">${esc(state)}</span>${this._tag(i.transport)}</span></span>
     </div>`;
   }
 
