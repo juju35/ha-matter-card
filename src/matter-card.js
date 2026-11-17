@@ -2917,13 +2917,13 @@ class MatterCard extends HTMLElement {
     this._thread = threadOf(infos, preferredDataset(), store.routers.seen ? [...store.routers.map.values()] : null, h);
   }
 
-  // Night banner: forced by illustration_theme, else the sun below the horizon, else the dark theme.
+  // Night banner: forced by illustration_theme, else the sun below the horizon or Home Assistant's dark theme (dark mode alone without a valid sun.sun).
   _night() {
     const mode = this._config.illustration_theme;
     if (mode === "night") return true;
     if (mode === "day") return false;
     const sun = this._hass?.states?.["sun.sun"]?.state;
-    if (sun === "below_horizon" || sun === "above_horizon") return sun === "below_horizon";
+    if (sun === "below_horizon" || sun === "above_horizon") return sun === "below_horizon" || !!this._hass?.themes?.darkMode;
     return !!this._hass?.themes?.darkMode;
   }
 

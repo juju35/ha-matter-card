@@ -37,7 +37,7 @@ The cards are built on top of Home Assistant's [Matter integration](https://www.
 - Click a node for its detail, in a popup at the top of the card: node ID, vendor and product, firmware, network, role, IP and MAC addresses, Wi-Fi signal, last seen, fabrics, and a button to the device page; it closes with its button, a click anywhere else, Escape, or when the card leaves the page
 - A **Commission device** button (administrators) opening Home Assistant's Matter add-device dialog
 - Mini card: the same 90 px banner with the Matter badge, the status of the network (« Healthy », « 2 issues »), the Thread / Wi-Fi / Ethernet counts and the issues as chips, and a detail button at the top right that unfolds the full card; a click anywhere outside the card folds it back
-- Night banner when the sun is below the horizon (`sun.sun`), else with the dark theme of Home Assistant, or forced with `illustration_theme`; `illustration: false` for a classic header with a round icon
+- Night banner when the sun is below the horizon (`sun.sun`) or with the dark theme of Home Assistant, or forced with `illustration_theme`; `illustration: false` for a classic header with a round icon
 - Visual editor for both cards; options left at their default are kept out of the YAML
 - Light and dark themes, `prefers-reduced-motion` honoured (everything stays still)
 - English, French, German, Spanish, Serbian (Cyrillic and Latin), Italian, Dutch, European Portuguese, Polish, Romanian, Danish, Swedish, Bulgarian, Russian, Ukrainian, Hungarian, Slovak, Czech, Slovenian, Latvian and Greek
@@ -137,7 +137,7 @@ zoom: true
 | `show_commission` | both | `true` | The **Commission device** button (shown to administrators only) |
 | `show_bridged` | both | `false` | Also show the devices bridged by a Matter bridge as tiles (otherwise counted as the bridge's endpoints) |
 | `illustration` | both | `true` | The animated banner as header (both cards); `false` for a classic header with a round icon |
-| `illustration_theme` | both | `auto` | `auto` (night banner when the sun is below the horizon, else with the dark theme of Home Assistant), `day` or `night` |
+| `illustration_theme` | both | `auto` | `auto` (night banner when the sun is below the horizon or with the dark theme of Home Assistant), `day` or `night` |
 | `exclude` | both | — | **YAML only.** Devices left out of the cards: a list of device ids or device names |
 | `zoom` | mini | `true` | Detail button at the top right: unfolds the full card and back (`false` removes it). The full card's options above apply to the unfolded view and are also set in the mini card's visual editor |
 | `language` | both | Auto | Force language: `en`, `fr`, `de`, `es`, `sr`, `sr-Latn`, `it`, `nl`, `pt`, `pl`, `ro`, `da`, `sv`, `bg`, `ru`, `uk`, `hu`, `sk`, `cs`, `sl`, `lv` or `el` (auto-detects from HA settings) |
