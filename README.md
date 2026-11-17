@@ -27,7 +27,8 @@ The cards are built on top of Home Assistant's [Matter integration](https://www.
 ## Features
 
 - Two cards: a full **Matter Card** and a compact **Matter Mini Card**, of type `custom:matter-card` and `custom:matter-mini-card`
-- An animated banner with the Matter logo: the Matter hub linked to four devices by flowing dashes, packets pulsing along the strip; when a node is unavailable, a device and its link turn red and the device blinks
+- An animated 90 px banner: a house section with the Matter hub at its centre linked to six devices (light, plug, thermometer, motion sensor, lock, blind), packets travelling along the links, on a purple network ground strip; when a node is unreachable, a device and its link turn red and the device blinks
+- The Matter badge takes the colour of the network's status: purple when healthy, amber for a low battery, red for an unreachable node, grey without any node
 - The banner's statistics: the Matter Server version (from its update entity, when there is one), the number of nodes and of fabrics
 - Status chips under the banner: **11 / 12 online**, **1 unavailable** (red), **1 low battery** (amber), with the names of the fabrics on the right (« HA · Apple Home »)
 - A **Thread network** tile: network name, channel, PAN ID and number of border routers, with its node count
@@ -35,8 +36,8 @@ The cards are built on top of Home Assistant's [Matter integration](https://www.
 - Healthy tiles stay neutral: only issues are coloured — a low battery in amber (« Battery 18% »), an unavailable node in red (« Unavailable · 1 h »)
 - Click a node for its detail, in a popup at the top of the card: node ID, vendor and product, firmware, network, role, IP and MAC addresses, Wi-Fi signal, last seen, fabrics, and a button to the device page; it closes with its button, a click anywhere else, Escape, or when the card leaves the page
 - A **Commission device** button (administrators) opening Home Assistant's Matter add-device dialog
-- Mini card: the Matter badge, the status of the network (« Healthy », « 2 issues »), the Thread / Wi-Fi / Ethernet counts and the issues as chips, and a detail button at the top right that unfolds the full card; a click anywhere outside the card folds it back
-- Night banner with the dark theme of Home Assistant, or forced with `illustration_theme`; `illustration: false` for a classic header with a round icon
+- Mini card: the same 90 px banner with the Matter badge, the status of the network (« Healthy », « 2 issues »), the Thread / Wi-Fi / Ethernet counts and the issues as chips, and a detail button at the top right that unfolds the full card; a click anywhere outside the card folds it back
+- Night banner when the sun is below the horizon (`sun.sun`), else with the dark theme of Home Assistant, or forced with `illustration_theme`; `illustration: false` for a classic header with a round icon
 - Visual editor for both cards; options left at their default are kept out of the YAML
 - Light and dark themes, `prefers-reduced-motion` honoured (everything stays still)
 - English, French, German, Spanish, Serbian (Cyrillic and Latin), Italian, Dutch, European Portuguese, Polish, Romanian, Danish, Swedish, Bulgarian, Russian, Ukrainian, Hungarian, Slovak, Czech, Slovenian, Latvian and Greek
@@ -135,8 +136,8 @@ zoom: true
 | `show_thread` | both | `true` | The Thread network tile |
 | `show_commission` | both | `true` | The **Commission device** button (shown to administrators only) |
 | `show_bridged` | both | `false` | Also show the devices bridged by a Matter bridge as tiles (otherwise counted as the bridge's endpoints) |
-| `illustration` | both | `true` | The animated banner as header; `false` for a classic header with a round icon |
-| `illustration_theme` | both | `auto` | `auto` (night banner with the dark theme of Home Assistant), `day` or `night` |
+| `illustration` | both | `true` | The animated banner as header (both cards); `false` for a classic header with a round icon |
+| `illustration_theme` | both | `auto` | `auto` (night banner when the sun is below the horizon, else with the dark theme of Home Assistant), `day` or `night` |
 | `exclude` | both | — | **YAML only.** Devices left out of the cards: a list of device ids or device names |
 | `zoom` | mini | `true` | Detail button at the top right: unfolds the full card and back (`false` removes it). The full card's options above apply to the unfolded view and are also set in the mini card's visual editor |
 | `language` | both | Auto | Force language: `en`, `fr`, `de`, `es`, `sr`, `sr-Latn`, `it`, `nl`, `pt`, `pl`, `ro`, `da`, `sv`, `bg`, `ru`, `uk`, `hu`, `sk`, `cs`, `sl`, `lv` or `el` (auto-detects from HA settings) |
@@ -216,7 +217,7 @@ For an administrator, the Thread tile shows the preferred dataset of the Thread 
 
 ### Narrow cards
 
-The full card fits down to 8 columns of a sections view (about 208 px on a phone), the mini card down to 6 columns (about 156 px). Under 460 px the node tiles go one per row; under 300 px the banner keeps its gradient and strip for its texts, without the scene. In a container sized by its content, the cards take a width of 400 px instead of collapsing.
+The full card fits down to 8 columns of a sections view (about 208 px on a phone), the mini card down to 6 columns (about 156 px). Under 460 px the node tiles go one per row; under 300 px the banner keeps its sky and ground strip for its texts, without the scene. In a container sized by its content, the cards take a width of 400 px instead of collapsing.
 
 ## Development
 

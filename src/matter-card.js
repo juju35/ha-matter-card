@@ -29,6 +29,9 @@ const ICONS = {
   temperature: "M15 13V5A3 3 0 0 0 9 5V13A5 5 0 1 0 15 13M12 4A1 1 0 0 1 13 5V8H11V5A1 1 0 0 1 12 4Z",
   humidity: "M12,3.25C12,3.25 6,10 6,14C6,17.32 8.69,20 12,20A6,6 0 0,0 18,14C18,10 12,3.25 12,3.25M14.47,9.97L15.53,11.03L9.53,17.03L8.47,15.97M9.75,10A1.25,1.25 0 0,1 11,11.25A1.25,1.25 0 0,1 9.75,12.5A1.25,1.25 0 0,1 8.5,11.25A1.25,1.25 0 0,1 9.75,10M14.25,14.5A1.25,1.25 0 0,1 15.5,15.75A1.25,1.25 0 0,1 14.25,17A1.25,1.25 0 0,1 13,15.75A1.25,1.25 0 0,1 14.25,14.5Z",
   blinds: "M3,2H21A1,1 0 0,1 22,3V5A1,1 0 0,1 21,6H20V13A1,1 0 0,1 19,14H13V16.17C14.17,16.58 15,17.69 15,19A3,3 0 0,1 12,22A3,3 0 0,1 9,19C9,17.69 9.83,16.58 11,16.17V14H5A1,1 0 0,1 4,13V6H3A1,1 0 0,1 2,5V3A1,1 0 0,1 3,2M12,18A1,1 0 0,0 11,19A1,1 0 0,0 12,20A1,1 0 0,0 13,19A1,1 0 0,0 12,18Z",
+  // The scene's blind (mdi blinds-horizontal).
+  blinds_h:
+    "M20 19V3H4V19H2V21H22V19H20M16 9H18V11H16V9M14 11H6V9H14V11M18 7H16V5H18V7M14 5V7H6V5H14M6 19V13H14V14.82C13.55 15.14 13.25 15.66 13.25 16.25C13.25 17.22 14.03 18 15 18S16.75 17.22 16.75 16.25C16.75 15.66 16.45 15.13 16 14.82V13H18V19H6Z",
   shutter: "M3 4H21V8H19V20H17V8H7V20H5V8H3V4M8 9H16V11H8V9M8 12H16V14H8V12M8 15H16V17H8V15M8 18H16V20H8V18Z",
   curtains: "M23 3H1V1H23V3M2 22H6C6 19 4 17 4 17C10 13 11 4 11 4H2V22M22 4H13C13 4 14 13 20 17C20 17 18 19 18 22H22V4Z",
   garage: "M19,20H17V11H7V20H5V9L12,5L19,9V20M8,12H16V14H8V12M8,15H16V17H8V15M16,18V20H8V18H16Z",
@@ -2414,25 +2417,42 @@ const watchOutside = (card, handler) => {
 };
 
 // ---------------------------------------------------------------------------
-// The banner's scene: the Matter hub and four devices, linked by flowing dashes; an unavailable device blinks red
+// The banner's scene: a house section, the Matter hub at its centre linked to six devices; packets travel the
+// links, and an unreachable device turns red and blinks
 // ---------------------------------------------------------------------------
 
-// Every animation of the banner lasts a divisor of 6 s (flow 1.5 s, blink 1.5 s, packets 2 s): a 6 s recording loops.
-// The scene is drawn in a 200 × 80 box whose bottom edge stands on the strip.
+// Every animation of the banner lasts a divisor of 6 s (packets 1.5 / 2 / 3 s, ping 2 s, blink 1.5 s, strip 2 s):
+// a 6 s recording loops. The scene is drawn in the 108 × 80 window (x 94 → 202) of a 200 × 80 box whose bottom
+// edge stands on the ground strip; the house's walls go down to it. No SVG ids: several cards share a page safely.
+const SCENE_HUB = [148, 44];
 const SCENE_DEVICES = [
-  { x: 52, y: 26, r: 10, icon: "light", at: "translate(46 20) scale(0.5)" },
-  { x: 56, y: 62, r: 9, icon: "plug", at: "translate(50.5 56.5) scale(0.46)" },
-  { x: 148, y: 26, r: 10, icon: "lock", at: "translate(142 20) scale(0.5)" },
-  { x: 146, y: 62, r: 9, icon: "temperature", at: "translate(140.5 56.5) scale(0.46)" },
+  [112, 22, "light"],
+  [140, 14, "outlet"],
+  [168, 31, "temperature"],
+  [110, 58, "motion"],
+  [186, 58, "lock"],
+  [160, 66, "blinds_h"],
 ];
+const SCENE_DOWN = 4;
+const SCENE_SPEEDS = [1.5, 2, 3, 1.5, 2, 3];
 const sceneSvg = (down) => {
-  const isDown = (i) => down && i === SCENE_DEVICES.length - 1;
-  return `<svg class="scene" viewBox="0 0 200 80" preserveAspectRatio="xMaxYMax meet" aria-hidden="true" focusable="false">
-    <g class="links">${SCENE_DEVICES.map((d, i) => `<line class="${isDown(i) ? "down" : "flow"}" x1="100" y1="42" x2="${d.x}" y2="${d.y}"/>`).join("")}</g>
-    <g class="devs">${SCENE_DEVICES.map((d, i) => `<circle class="${isDown(i) ? "down blink" : "up"}" cx="${d.x}" cy="${d.y}" r="${d.r}"/>`).join("")}</g>
-    <g class="glyphs">${SCENE_DEVICES.map((d, i) => `<path class="${isDown(i) ? "down" : ""}" transform="${d.at}" d="${ICONS[d.icon]}"/>`).join("")}</g>
-    <circle class="hub" cx="100" cy="42" r="13"/>
-    <path class="hub-logo" transform="translate(92.5 34.5) scale(0.0293)" d="${MATTER}"/>
+  const [hx, hy] = SCENE_HUB;
+  const bad = (i) => down && i === SCENE_DOWN;
+  const links = SCENE_DEVICES.map(([x, y], i) => {
+    const line = `<line class="${bad(i) ? "down" : "up"}" x1="${hx}" y1="${hy}" x2="${x}" y2="${y}"/>`;
+    if (bad(i)) return line;
+    return `${line}<circle class="pkt" r="1.6" style="offset-path:path('M${hx} ${hy} L${x} ${y}');animation-duration:${SCENE_SPEEDS[i]}s;animation-delay:-${i * 0.5}s"/>`;
+  }).join("");
+  const devices = SCENE_DEVICES.map(
+    ([x, y, icon], i) =>
+      `<g class="dev${bad(i) ? " down" : ""}" transform="translate(${x} ${y})"><circle r="9"/><path transform="translate(-6.5 -6.5) scale(0.54)" d="${ICONS[icon]}"/>${
+        bad(i) ? '<circle class="alarm blink" cx="6.6" cy="-6.6" r="2.4"/>' : ""
+      }</g>`,
+  ).join("");
+  return `<svg class="scene" viewBox="94 0 108 80" preserveAspectRatio="xMaxYMax meet" aria-hidden="true" focusable="false">
+    <path class="house" d="M98 80 V30 L148 6 L198 30 V80"/><line class="floor" x1="98" y1="44" x2="198" y2="44"/>
+    <g class="links">${links}</g>${devices}
+    <g transform="translate(${hx} ${hy})"><circle class="ping" r="10"/><circle class="hub" r="10"/><path class="hub-logo" transform="translate(-7 -7) scale(0.0273)" d="${MATTER}"/></g>
   </svg>`;
 };
 
@@ -2455,36 +2475,31 @@ const COMMON_STYLE = `
   .warning { padding: 16px; color: color-mix(in srgb, var(--mc-warn) 40%, var(--primary-text-color, #212121)); }
 `;
 
-const FULL_STYLE = `
-  /* Status pill: the state colour on a tint, the text mixed with the text colour to stay readable. */
-  .chip { display: inline-flex; align-items: center; gap: 4px; padding: 1px 8px; border-radius: 12px; font-size: 11px; font-weight: 500;
-          line-height: 16px; white-space: nowrap; min-width: 0; max-width: 100%; box-sizing: border-box; overflow: hidden; flex: 0 1 auto;
-          background: color-mix(in srgb, var(--c) 15%, transparent); color: color-mix(in srgb, var(--c) 40%, var(--primary-text-color, #212121)); }
-  .chip .txt { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
-  .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--c); flex: none; }
-
-  /* ── Illustrated header ── */
-  .banner { position: relative; height: var(--banner-h, 92px); overflow: hidden; --strip-h: 12px;
-            --sky-text: #1f1b4d; --sky-muted: #4b4680;
+// The illustrated header, the same on both cards: 90 px, the title on the lavender sky at its left, the scene at its
+// right, a 10 px ground strip edge to edge at its bottom (a network line with nodes, packets sliding along it).
+const BANNER_STYLE = `
+  .banner { position: relative; height: 90px; overflow: hidden; --strip-h: 10px; --scene-w: 108px;
+            --sky-text: #1f1b4d; --sky-muted: #4b4680; --mesh: #7f5bd6; --line: #5b52c9; --dev-bg: #f6f5ff; --dev-st: #c9c4f5; --wall: #d8cfc1;
             background: linear-gradient(90deg, #f7f6ff 0%, #ecebfd 34%, #d8d5fa 70%, #c6c2f5 100%); }
-  .banner.night { --sky-text: #ffffff; --sky-muted: rgba(255,255,255,.78);
+  .banner.night { --sky-text: #ffffff; --sky-muted: rgba(255,255,255,.78); --line: #a9a3ff; --dev-bg: #211e47; --dev-st: #3e3a7a; --wall: #3a4456;
                   background: linear-gradient(90deg, #26234f 0%, #211e47 36%, #1b1940 72%, #161435 100%); }
-  .banner .scene { position: absolute; right: 0; bottom: var(--strip-h); height: calc(100% - var(--strip-h));
-                   width: min(calc((var(--banner-h, 92px) - var(--strip-h)) * 2.5), var(--scene-max, 58%)); overflow: hidden; }
-  .strip { position: absolute; left: 0; right: 0; bottom: 0; height: var(--strip-h); background: #8f9aa6;
-           box-shadow: inset 0 1px 0 #7a8591, inset 0 -1px 0 #7a8591; }
-  .night .strip { background: #2c323b; box-shadow: inset 0 1px 0 #1f242b, inset 0 -1px 0 #1f242b; }
-  /* Packets travelling the network: a dashed line, pulsing. */
-  .strip .packets { position: absolute; left: 0; right: 0; top: calc(50% - 1px); height: 2px;
-                    background: repeating-linear-gradient(90deg, rgba(255,255,255,.85) 0 6px, transparent 6px 14px);
-                    animation: mc-pulse 2s ease-in-out infinite; }
-  .night .strip .packets { background: repeating-linear-gradient(90deg, rgba(255,255,255,.5) 0 6px, transparent 6px 14px); }
-  .head { position: absolute; z-index: 1; left: 0; top: 0; bottom: var(--strip-h); box-sizing: border-box;
-          right: min(calc((var(--banner-h, 92px) - var(--strip-h)) * 2.5), var(--scene-max, 58%));
-          display: flex; align-items: center; gap: 10px; padding: 8px 8px 8px 14px; min-width: 0; color: var(--sky-text); }
-  .badge { width: 40px; height: 40px; flex: none; border-radius: 50%; display: grid; place-items: center; color: var(--mc-accent);
-           background: rgba(255,255,255,.62); box-shadow: inset 0 0 0 1px rgba(91,91,214,.2); }
-  .night .badge { background: rgba(255,255,255,.12); color: #b9b7ff; box-shadow: inset 0 0 0 1px rgba(255,255,255,.14); }
+  .banner .scene { position: absolute; right: 0; bottom: var(--strip-h); height: calc(100% - var(--strip-h)); width: var(--scene-w); overflow: hidden; }
+  /* Ground strip: the Matter network line, its nodes every 24 px. */
+  .strip { position: absolute; left: 0; right: 0; bottom: 0; height: var(--strip-h);
+           background-color: color-mix(in srgb, var(--mesh) 18%, #e9eef5);
+           background-image: radial-gradient(circle, var(--mesh) 2px, transparent 2.5px), linear-gradient(var(--mesh), var(--mesh));
+           background-size: 24px 100%, 100% 1px; background-repeat: repeat-x, no-repeat; background-position: 0 50%, 0 50%;
+           box-shadow: inset 0 2px 0 color-mix(in srgb, var(--mesh) 50%, #fff); animation: mc-slide 2s linear infinite; }
+  .night .strip { background-color: color-mix(in srgb, var(--mesh) 20%, #1a202c); box-shadow: inset 0 2px 0 color-mix(in srgb, var(--mesh) 55%, #1a202c); }
+  .head { position: absolute; z-index: 1; left: 0; top: 0; bottom: var(--strip-h); box-sizing: border-box; right: calc(var(--scene-w) + 4px);
+          display: flex; align-items: center; gap: 10px; padding: 6px 6px 6px 12px; min-width: 0; color: var(--sky-text); }
+  /* The Matter badge: its colour is the network's status (healthy accent, a low battery amber, an unreachable node red,
+     no node grey). */
+  .badge { position: relative; width: 40px; height: 40px; flex: none; border-radius: 50%; display: grid; place-items: center; color: var(--bc);
+           --bc: var(--mc-accent); background: rgba(255,255,255,.62); box-shadow: inset 0 0 0 1px rgba(91,91,214,.2); }
+  .night .badge { --bc: #b9b7ff; background: rgba(255,255,255,.12); box-shadow: inset 0 0 0 1px rgba(255,255,255,.14); }
+  .badge.s-warn, .night .badge.s-warn { --bc: var(--mc-warn); } .badge.s-alert, .night .badge.s-alert { --bc: var(--mc-alert); }
+  .badge.s-na, .night .badge.s-na { --bc: var(--mc-idle); }
   .badge .icon { width: 24px; height: 24px; }
   .titles { flex: 1 1 0; min-width: 0; overflow: hidden; }
   .name { font-size: 16px; font-weight: 500; line-height: 1.25; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
@@ -2494,25 +2509,29 @@ const FULL_STYLE = `
   .stats span { white-space: nowrap; }
   .stats span::before { content: "·"; display: inline-block; width: 10px; text-align: center; }
   /* Scene colours, day and night. */
-  .scene .links line { stroke: var(--mc-accent); stroke-width: 1.8; fill: none; stroke-linecap: round; stroke-dasharray: 2 5; }
-  .scene .links line.down { stroke: var(--mc-alert); }
-  .scene .devs circle { fill: #ffffff; stroke: var(--mc-ok); stroke-width: 1.8; }
-  .scene .devs circle.down { stroke: var(--mc-alert); }
-  .scene .glyphs path { fill: #4a5563; } .scene .glyphs path.down { fill: var(--mc-alert); }
-  .scene .hub { fill: #ffffff; stroke: var(--mc-accent); stroke-width: 2; } .scene .hub-logo { fill: var(--mc-accent); }
-  .night .scene .devs circle, .night .scene .hub { fill: #2f2c5c; }
-  .night .scene .glyphs path:not(.down) { fill: #d4d6ec; }
-  .night .scene .links line:not(.down), .night .scene .hub { stroke: #8d8bf0; } .night .scene .hub-logo { fill: #b9b7ff; }
+  .scene .house { fill: rgba(255,255,255,.55); stroke: var(--wall); stroke-width: 1.6; }
+  .night .scene .house { fill: rgba(255,255,255,.03); }
+  .scene .floor { stroke: var(--wall); stroke-width: 1; stroke-dasharray: 3 3; }
+  .scene .links line { stroke: var(--line); stroke-width: 1.2; stroke-opacity: .55; }
+  .scene .links line.down { stroke: var(--mc-alert); stroke-opacity: .8; stroke-dasharray: 2 3; }
+  .scene .pkt { fill: var(--line); animation: mc-pkt 2s linear infinite; }
+  .scene .dev circle { fill: var(--dev-bg); stroke: var(--dev-st); stroke-width: 1.4; }
+  .scene .dev path { fill: var(--line); }
+  .scene .dev.down circle { stroke: var(--mc-alert); } .scene .dev.down path { fill: var(--mc-alert); }
+  .scene .dev .alarm { fill: var(--mc-alert); stroke: none; }
+  .scene .hub { fill: var(--line); } .scene .hub-logo { fill: #ffffff; }
+  .scene .ping { fill: none; stroke: var(--line); stroke-width: 1; transform-box: fill-box; transform-origin: center; animation: mc-ping 2s ease-out infinite; }
   /* ── Animations (each one a divisor of 6 s) ── */
-  .scene .links .flow { animation: mc-flow 1.5s linear infinite; }
   .scene .blink { animation: mc-blink 1.5s ease-in-out infinite; }
-  @keyframes mc-flow { to { stroke-dashoffset: -21; } }
+  @keyframes mc-pkt { from { offset-distance: 0%; opacity: 0; } 15% { opacity: 1; } 85% { opacity: 1; } to { offset-distance: 100%; opacity: 0; } }
+  @keyframes mc-ping { from { transform: scale(1); opacity: .9; } to { transform: scale(2.6); opacity: 0; } }
   @keyframes mc-blink { 0%, 100% { opacity: 1; } 50% { opacity: .35; } }
-  @keyframes mc-pulse { 0%, 100% { opacity: .55; } 50% { opacity: 1; } }
+  @keyframes mc-slide { to { background-position: 24px 50%, 0 50%; } }
   @media (prefers-reduced-motion: reduce) {
-    .scene *, .strip .packets { animation: none !important; }
+    .scene *, .strip { animation: none !important; }
+    .scene .pkt, .scene .ping { display: none; }
   }
-  /* A narrow card keeps the gradient and the strip for its texts: no scene. */
+  /* A narrow card keeps the sky and the strip for its texts: no scene. */
   @container (max-width: 300px) {
     .banner .scene { display: none; }
     .head { right: 0; }
@@ -2520,8 +2539,17 @@ const FULL_STYLE = `
 
   /* ── Classic header (illustration: false) ── */
   .header { display: flex; align-items: center; gap: 10px; padding: 12px 14px 0; }
-  .header .badge { color: var(--mc-accent); background: color-mix(in srgb, var(--mc-accent) 16%, transparent); box-shadow: none; }
+  .header .badge { background: color-mix(in srgb, var(--bc) 16%, transparent); box-shadow: none; }
   .header .stats { color: var(--secondary-text-color); }
+`;
+
+const FULL_STYLE = `
+  /* Status pill: the state colour on a tint, the text mixed with the text colour to stay readable. */
+  .chip { display: inline-flex; align-items: center; gap: 4px; padding: 1px 8px; border-radius: 12px; font-size: 11px; font-weight: 500;
+          line-height: 16px; white-space: nowrap; min-width: 0; max-width: 100%; box-sizing: border-box; overflow: hidden; flex: 0 1 auto;
+          background: color-mix(in srgb, var(--c) 15%, transparent); color: color-mix(in srgb, var(--c) 40%, var(--primary-text-color, #212121)); }
+  .chip .txt { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
+  .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--c); flex: none; }
 
   /* ── Status chips, fabrics on the right ── */
   .status { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 8px; padding: 10px 12px 0; min-width: 0; }
@@ -2597,22 +2625,8 @@ const FULL_STYLE = `
   .modal .actions { margin-top: 0; }
 `;
 
-// The mini card: a 40 px badge beside the title, the status and the chips, like the other ha-* mini cards.
-const MINI_STYLE = `
-  ha-card { padding: 12px; }
-  .mini { display: flex; align-items: flex-start; gap: 10px; }
-  .badge { flex: none; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center;
-           background: color-mix(in srgb, var(--c) 16%, transparent); color: var(--c); }
-  .badge .icon { width: 24px; height: 24px; }
-  /* The badge keeps the full card's size (40 px, icon 24 px): the body is at least as tall, a lone title line centred
-     beside it. */
-  .body { flex: 1; min-width: 0; min-height: 40px; display: flex; flex-direction: column; justify-content: center; gap: 4px; }
-  .mhead { display: flex; align-items: center; gap: 8px; }
-  .title { flex: 1 1 0; min-width: 5ch; font-size: 16px; font-weight: 500; line-height: 1.25; color: var(--primary-text-color);
-           white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-  .st { flex: 0 1 auto; min-width: 0; position: relative; display: inline-flex; align-items: center;
-        margin-left: auto; font-size: 11px; font-weight: 500; color: var(--c); }
-  .pt { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+// The mini cards' chips row.
+const MINI_CHIPS_STYLE = `
   .rs { display: flex; flex-wrap: wrap; gap: 2px 4px; margin-left: -4px; }
   .rs:empty { display: none; }
   /* A chip is plain (icon and text) until it needs a look: then a tinted pill. It never runs past the card. */
@@ -2623,7 +2637,26 @@ const MINI_STYLE = `
   .r > span { min-width: 0; overflow: hidden; text-overflow: ellipsis; }
   .r.pill { color: var(--t); background: color-mix(in srgb, var(--t) 14%, transparent); }
   .r.alert { --t: var(--mc-alert); } .r.warn { --t: var(--mc-warn); }
-  .zoom { all: unset; flex: none; cursor: pointer; width: 24px; height: 24px; margin: -4px -4px -4px 0; border-radius: 50%;
+`;
+
+// The mini card: a 40 px badge beside the title, the status and the chips, like the other ha-* mini cards.
+const MINI_STYLE = `
+  ha-card { padding: 12px; }
+  .mini { display: flex; align-items: flex-start; gap: 10px; }
+  .badge { flex: none; width: 40px; height: 40px; border-radius: 50%; display: grid; place-items: center; --bc: var(--mc-accent);
+           background: color-mix(in srgb, var(--bc) 16%, transparent); color: var(--bc); }
+  .badge.s-warn { --bc: var(--mc-warn); } .badge.s-alert { --bc: var(--mc-alert); } .badge.s-na { --bc: var(--mc-idle); }
+  .badge .icon { width: 24px; height: 24px; }
+  /* The badge keeps the full card's size (40 px, icon 24 px): the body is at least as tall, a lone title line centred
+     beside it. */
+  .body { flex: 1; min-width: 0; min-height: 40px; display: flex; flex-direction: column; justify-content: center; gap: 4px; }
+  .mhead { display: flex; align-items: center; gap: 8px; }
+  .title { flex: 1 1 0; min-width: 5ch; font-size: 16px; font-weight: 500; line-height: 1.25; color: var(--primary-text-color);
+           white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .st { flex: 0 1 auto; min-width: 0; position: relative; display: inline-flex; align-items: center;
+        margin-left: auto; font-size: 11px; font-weight: 500; color: var(--c); }
+  .pt { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+${MINI_CHIPS_STYLE}  .zoom { all: unset; flex: none; cursor: pointer; width: 24px; height: 24px; margin: -4px -4px -4px 0; border-radius: 50%;
           display: grid; place-items: center; color: var(--secondary-text-color); }
   .zoom .icon { width: 16px; height: 16px; }
   .zoom:hover { background: color-mix(in srgb, var(--mc-idle) 16%, transparent); color: var(--primary-text-color); }
@@ -2637,6 +2670,15 @@ const MINI_STYLE = `
     .mhead { gap: 4px; }
     .title { min-width: 2ch; }
   }
+`;
+
+// The illustrated mini card: the banner, the status (a dot of its colour) under the title, the chips row below.
+const MINI_BANNER_STYLE = `
+  .st { display: flex; align-items: center; gap: 5px; min-width: 0; font-size: 12px; font-weight: 500; line-height: 16px; color: var(--sky-muted); }
+  .st::before { content: ""; flex: none; width: 8px; height: 8px; border-radius: 50%; background: var(--c); }
+  .pt { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  @container (max-width: 300px) { .head { right: 34px; } }
+${MINI_CHIPS_STYLE}  .rs { padding: 8px 10px 10px 8px; margin-left: 0; }
 `;
 
 // The zoomed mini card: the full card, with the detail button over its banner.
@@ -2849,11 +2891,13 @@ class MatterCard extends HTMLElement {
     this._thread = threadOf(infos, preferredDataset(), store.routers.seen ? [...store.routers.map.values()] : null, h);
   }
 
-  // Night banner: forced by illustration_theme, else the dark theme.
+  // Night banner: forced by illustration_theme, else the sun below the horizon, else the dark theme.
   _night() {
     const mode = this._config.illustration_theme;
     if (mode === "night") return true;
     if (mode === "day") return false;
+    const sun = this._hass?.states?.["sun.sun"]?.state;
+    if (sun === "below_horizon" || sun === "above_horizon") return sun === "below_horizon";
     return !!this._hass?.themes?.darkMode;
   }
 
@@ -2944,9 +2988,26 @@ class MatterCard extends HTMLElement {
     return parts;
   }
 
+  // The network's status, the colour of the Matter badge: an unreachable node first, then a low battery.
+  _level() {
+    const s = this._summary;
+    return !s.total ? "na" : s.unavailable ? "alert" : s.lowBattery ? "warn" : "ok";
+  }
+
+  _badgeHtml() {
+    return `<div class="badge s-${this._level()}">${matterLogo()}</div>`;
+  }
+
+  _bannerOpen() {
+    const night = this._night();
+    return `<div class="banner${night ? " night" : ""}">
+      ${sceneSvg(this._summary.unavailable > 0)}
+      <div class="strip"></div>`;
+  }
+
   _titleBlock() {
     const stats = this._statsText();
-    return `<div class="badge">${matterLogo()}</div>
+    return `${this._badgeHtml()}
       <div class="titles">
         <div class="name">${esc(this._config.title || this._t("title"))}</div>
         <div class="stats">${stats.map((s) => `<span>${esc(s)}</span>`).join("")}</div>
@@ -2955,11 +3016,8 @@ class MatterCard extends HTMLElement {
 
   _header() {
     if (this._config.illustration === false) return `<div class="header">${this._titleBlock()}${this._zoomButton("plain")}</div>`;
-    const night = this._night();
-    return `<div class="banner${night ? " night" : ""}">
-      ${sceneSvg(this._summary.unavailable > 0)}
-      <div class="strip"><div class="packets"></div></div>
-      <div class="head">${this._titleBlock()}</div>${this._zoomButton(night ? "on-night" : "")}
+    return `${this._bannerOpen()}
+      <div class="head">${this._titleBlock()}</div>${this._zoomButton(this._night() ? "on-night" : "")}
     </div>`;
   }
 
@@ -3010,7 +3068,7 @@ class MatterCard extends HTMLElement {
 
   _render() {
     if (!this._infos.length && !Object.values(this._hass?.devices || {}).some(isMatterDevice)) return this._noDevices();
-    return `<style>${COMMON_STYLE}${FULL_STYLE}${this._extraStyle()}</style>
+    return `<style>${COMMON_STYLE}${BANNER_STYLE}${FULL_STYLE}${this._extraStyle()}</style>
       <ha-card style="--cols:${this._cols()}">
         ${this._header()}
         ${this._statusRow()}
@@ -3143,7 +3201,7 @@ class MatterMiniCard extends MatterCard {
   }
 
   getCardSize() {
-    return this._zoomed ? super.getCardSize() : 2;
+    return this._zoomed ? super.getCardSize() : this._config?.illustration === false ? 2 : 3;
   }
 
   getGridOptions() {
@@ -3195,18 +3253,31 @@ class MatterMiniCard extends MatterCard {
     for (const tr of TRANSPORTS) if (s.count[tr]) chips.push(this._miniChip(TRANSPORT_ICONS[tr], this._t(`count_${tr}`, { n: this._num(s.count[tr]) })));
     if (s.unavailable) chips.push(this._miniChip(ICONS.offline, this._p("unavailable", s.unavailable), "alert"));
     if (s.lowBattery) chips.push(this._miniChip(ICONS.battery, this._p("low_battery", s.lowBattery), "warn"));
-    return `<style>${COMMON_STYLE}${MINI_STYLE}</style>
+    const title = esc(this._config.title || this._t("matter"));
+    if (this._config.illustration === false)
+      return `<style>${COMMON_STYLE}${MINI_STYLE}</style>
       <ha-card>
         <div class="mini ${level}">
-          <div class="badge">${matterLogo()}</div>
+          ${this._badgeHtml()}
           <div class="body">
             <div class="mhead">
-              <span class="title">${esc(this._config.title || this._t("matter"))}</span>
+              <span class="title">${title}</span>
               <span class="st" title="${esc(status)}"><span class="pt">${esc(status)}</span></span>
               ${this._zoomButton()}
             </div>
             <div class="rs">${chips.join("")}</div>
           </div>
+        </div>
+      </ha-card>`;
+    // The illustrated mini card: the full card's banner, its status under the title, the chips below.
+    return `<style>${COMMON_STYLE}${BANNER_STYLE}${MINI_BANNER_STYLE}${ZOOM_STYLE}</style>
+      <ha-card>
+        <div class="mini ${level}">
+          ${this._bannerOpen()}
+            <div class="head">${this._badgeHtml()}<div class="titles"><div class="name">${title}</div><div class="st" title="${esc(status)}"><span class="pt">${esc(status)}</span></div></div></div>
+            ${this._zoomButton(this._night() ? "on-night" : "")}
+          </div>
+          <div class="rs">${chips.join("")}</div>
         </div>
       </ha-card>`;
   }
