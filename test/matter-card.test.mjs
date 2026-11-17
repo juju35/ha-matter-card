@@ -234,12 +234,13 @@ test("the mini card: the full card's banner, or its classic layout without the i
   assert.match(render(card(mc.MatterMiniCard, { illustration_theme: "night" }, hass)), /class="banner night"/);
 });
 
-test("night banner: the sun below the horizon or the dark theme, even with the sun up", () => {
+test("night banner: the dark theme alone, whatever the sun", () => {
   const sun = (state, dark = false) => {
     const h = mockHass({ dark });
     return { ...h, states: { ...h.states, "sun.sun": { entity_id: "sun.sun", state, attributes: {} } } };
   };
-  assert.match(render(card(mc.MatterCard, {}, sun("below_horizon"))), /class="banner night"/);
+  assert.doesNotMatch(render(card(mc.MatterCard, {}, sun("below_horizon"))), /banner night/);
+  assert.match(render(card(mc.MatterCard, {}, sun("below_horizon", true))), /class="banner night"/);
   assert.match(render(card(mc.MatterCard, {}, sun("above_horizon", true))), /class="banner night"/);
   assert.doesNotMatch(render(card(mc.MatterCard, {}, sun("above_horizon"))), /banner night/);
   assert.doesNotMatch(render(card(mc.MatterCard, { illustration_theme: "day" }, sun("above_horizon", true))), /banner night/);
