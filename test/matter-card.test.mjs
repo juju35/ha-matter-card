@@ -377,6 +377,28 @@ test("the editors keep the YAML minimal and the mini card's editor has the full 
   assert.ok(!full.includes("exclude"));
 });
 
+test("the editor sets its form's data and schema again only when they change", () => {
+  const ed = new mc.MatterCardEditor();
+  let form;
+  let sets = 0;
+  mc.document.createElement = (tag) => {
+    form = { tag, listeners: {}, addEventListener(t, f) { this.listeners[t] = f; } };
+    let data;
+    Object.defineProperty(form, "data", { get: () => data, set: (v) => { sets++; data = v; } });
+    return form;
+  };
+  ed.appendChild = () => {};
+  ed.setConfig({ type: "custom:matter-card" });
+  ed.hass = mockHass();
+  const schema = form.schema;
+  const before = sets;
+  ed.hass = mockHass();
+  assert.equal(sets, before);
+  assert.equal(form.schema, schema);
+  ed.setConfig({ type: "custom:matter-card", columns: 3 });
+  assert.equal(sets, before + 1);
+});
+
 test("the device scan is kept per registry and exclude", () => {
   const hass = mockHass();
   const a = mc.matterDevices(hass, {});
