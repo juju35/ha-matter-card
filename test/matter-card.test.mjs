@@ -17,6 +17,7 @@ const mc = load([
   "unsubscribeRouters",
   "store",
   "plural",
+  "serverVersion",
   "STRINGS",
   "MatterCard",
   "MatterMiniCard",
@@ -448,4 +449,34 @@ test("plural forms: every category a language uses has its text or falls back to
   assert.equal(p("pl", "nodes", 3), "3 węzły");
   assert.equal(p("sl", "issues", 2), "2 težavi");
   assert.equal(p("sr", "border_routers", 22), "22 гранична рутера");
+});
+
+test("Matter Server version: from its update entity, the registry's update ids listed once", () => {
+  const hass = mockHass();
+  assert.equal(mc.serverVersion(hass), "8.1");
+  // Another states object, the same registry: still found, nothing else walked.
+  assert.equal(mc.serverVersion({ ...hass, states: { ...hass.states } }), "8.1");
+  assert.equal(mc.serverVersion({ ...hass, states: { ...hass.states, "update.matter_server_update": undefined } }), null);
+  // No registry (an old frontend): the states are read.
+  assert.equal(mc.serverVersion({ states: hass.states }), "8.1");
+  assert.equal(mc.serverVersion(null), null);
+});
+
+test("show_title / show_subtitle: hide the header's title and its stats line, the pill stays", () => {
+  const el = new mc.MatterCard();
+  const attrs = new Set();
+  el.toggleAttribute = (n, on) => (on ? attrs.add(n) : attrs.delete(n));
+  el._update = () => {};
+  el.setConfig({ type: "custom:matter-card", show_title: false, show_subtitle: false });
+  assert.deepEqual([...attrs].sort(), ["hide-subtitle", "hide-title"]);
+  el.setConfig({ type: "custom:matter-card" });
+  assert.deepEqual([...attrs], []);
+  const html = render(card(mc.MatterCard));
+  assert.match(html, /:host\(\[hide-title\]\) \.titles \.name/);
+  assert.match(html, /:host\(\[hide-subtitle\]\) \.titles > \.stats/);
+  const ed = new mc.MatterMiniCardEditor();
+  ed.setConfig({ type: "custom:matter-mini-card" });
+  const names = JSON.stringify(ed._schema.call({ _hass: null, _config: {}, constructor: mc.MatterMiniCardEditor }));
+  for (const k of ["show_title", "show_subtitle"]) assert.ok(names.includes(`"${k}"`), k);
+  for (const l of Object.keys(mc.STRINGS)) for (const k of ["show_title", "show_subtitle"]) assert.ok(mc.STRINGS[l][k], `${l}.${k}`);
 });

@@ -119,6 +119,7 @@ export const mockHass = ({ dark = false, healthy = false, admin = true } = {}) =
     entity_id: "update.matter_server_update", state: "off", attributes: { title: "Matter Server", installed_version: "8.1", latest_version: "8.1", friendly_name: "Matter Server Update" },
     last_changed: iso(600), last_updated: iso(600),
   };
+  entities["update.matter_server_update"] = { entity_id: "update.matter_server_update", device_id: null, platform: "hassio", labels: [] };
   const DATASET = {
     channel: 25, created: "2026-01-10T10:00:00Z", dataset_id: "ds1", extended_pan_id: "1a2b3c4d5e6f7a8b", network_name: "Home-Thread", pan_id: "1A2B",
     preferred: true, preferred_border_agent_id: null, preferred_extended_address: null, source: "Matter",

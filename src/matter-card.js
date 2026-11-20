@@ -138,6 +138,8 @@ const STRINGS = {
     show_thread: "Thread network",
     show_commission: "Commission button",
     show_bridged: "Bridged devices",
+    show_title: "Show title",
+    show_subtitle: "Show subtitle",
     illustration: "Illustration",
     illustration_theme: "Illustration theme",
     theme_auto: "Automatic (follows the theme)",
@@ -217,6 +219,8 @@ const STRINGS = {
     show_thread: "Réseau Thread",
     show_commission: "Bouton d'ajout",
     show_bridged: "Appareils pontés",
+    show_title: "Afficher le titre",
+    show_subtitle: "Afficher le sous-titre",
     illustration: "Illustration",
     illustration_theme: "Thème de l'illustration",
     theme_auto: "Automatique (suit le thème)",
@@ -296,6 +300,8 @@ const STRINGS = {
     show_thread: "Thread-Netzwerk",
     show_commission: "Hinzufügen-Schaltfläche",
     show_bridged: "Gebridgte Geräte",
+    show_title: "Titel anzeigen",
+    show_subtitle: "Untertitel anzeigen",
     illustration: "Illustration",
     illustration_theme: "Illustrationsthema",
     theme_auto: "Automatisch (folgt dem Thema)",
@@ -375,6 +381,8 @@ const STRINGS = {
     show_thread: "Red Thread",
     show_commission: "Botón para añadir",
     show_bridged: "Dispositivos puenteados",
+    show_title: "Mostrar el título",
+    show_subtitle: "Mostrar el subtítulo",
     illustration: "Ilustración",
     illustration_theme: "Tema de la ilustración",
     theme_auto: "Automático (sigue el tema)",
@@ -459,6 +467,8 @@ const STRINGS = {
     show_thread: "Thread мрежа",
     show_commission: "Дугме за додавање",
     show_bridged: "Премошћени уређаји",
+    show_title: "Прикажи наслов",
+    show_subtitle: "Прикажи поднаслов",
     illustration: "Илустрација",
     illustration_theme: "Тема илустрације",
     theme_auto: "Аутоматски (прати тему)",
@@ -543,6 +553,8 @@ const STRINGS = {
     show_thread: "Thread mreža",
     show_commission: "Dugme za dodavanje",
     show_bridged: "Premošćeni uređaji",
+    show_title: "Prikaži naslov",
+    show_subtitle: "Prikaži podnaslov",
     illustration: "Ilustracija",
     illustration_theme: "Tema ilustracije",
     theme_auto: "Automatski (prati temu)",
@@ -622,6 +634,8 @@ const STRINGS = {
     show_thread: "Rete Thread",
     show_commission: "Pulsante di aggiunta",
     show_bridged: "Dispositivi in bridge",
+    show_title: "Mostra il titolo",
+    show_subtitle: "Mostra il sottotitolo",
     illustration: "Illustrazione",
     illustration_theme: "Tema dell'illustrazione",
     theme_auto: "Automatico (segue il tema)",
@@ -701,6 +715,8 @@ const STRINGS = {
     show_thread: "Thread-netwerk",
     show_commission: "Toevoegknop",
     show_bridged: "Gebridgede apparaten",
+    show_title: "Titel tonen",
+    show_subtitle: "Ondertitel tonen",
     illustration: "Illustratie",
     illustration_theme: "Thema van de illustratie",
     theme_auto: "Automatisch (volgt het thema)",
@@ -780,6 +796,8 @@ const STRINGS = {
     show_thread: "Rede Thread",
     show_commission: "Botão de adição",
     show_bridged: "Dispositivos em ponte",
+    show_title: "Mostrar o título",
+    show_subtitle: "Mostrar o subtítulo",
     illustration: "Ilustração",
     illustration_theme: "Tema da ilustração",
     theme_auto: "Automático (segue o tema)",
@@ -869,6 +887,8 @@ const STRINGS = {
     show_thread: "Sieć Thread",
     show_commission: "Przycisk dodawania",
     show_bridged: "Urządzenia za mostkiem",
+    show_title: "Pokaż tytuł",
+    show_subtitle: "Pokaż podtytuł",
     illustration: "Ilustracja",
     illustration_theme: "Motyw ilustracji",
     theme_auto: "Automatycznie (według motywu)",
@@ -955,6 +975,8 @@ const STRINGS = {
     show_thread: "Rețea Thread",
     show_commission: "Buton de adăugare",
     show_bridged: "Dispozitive prin punte",
+    show_title: "Afișează titlul",
+    show_subtitle: "Afișează subtitlul",
     illustration: "Ilustrație",
     illustration_theme: "Tema ilustrației",
     theme_auto: "Automat (urmează tema)",
@@ -1034,6 +1056,8 @@ const STRINGS = {
     show_thread: "Thread-netværk",
     show_commission: "Tilføj-knap",
     show_bridged: "Brokoblede enheder",
+    show_title: "Vis titel",
+    show_subtitle: "Vis undertitel",
     illustration: "Illustration",
     illustration_theme: "Illustrationstema",
     theme_auto: "Automatisk (følger temaet)",
@@ -1113,6 +1137,8 @@ const STRINGS = {
     show_thread: "Thread-nätverk",
     show_commission: "Lägg till-knapp",
     show_bridged: "Bryggade enheter",
+    show_title: "Visa titel",
+    show_subtitle: "Visa undertitel",
     illustration: "Illustration",
     illustration_theme: "Illustrationstema",
     theme_auto: "Automatiskt (följer temat)",
@@ -1192,6 +1218,8 @@ const STRINGS = {
     show_thread: "Thread мрежа",
     show_commission: "Бутон за добавяне",
     show_bridged: "Устройства през мост",
+    show_title: "Покажи заглавието",
+    show_subtitle: "Покажи подзаглавието",
     illustration: "Илюстрация",
     illustration_theme: "Тема на илюстрацията",
     theme_auto: "Автоматично (следва темата)",
@@ -1281,6 +1309,8 @@ const STRINGS = {
     show_thread: "Сеть Thread",
     show_commission: "Кнопка добавления",
     show_bridged: "Устройства через мост",
+    show_title: "Показывать заголовок",
+    show_subtitle: "Показывать подзаголовок",
     illustration: "Иллюстрация",
     illustration_theme: "Тема иллюстрации",
     theme_auto: "Автоматически (по теме)",
@@ -1370,6 +1400,8 @@ const STRINGS = {
     show_thread: "Мережа Thread",
     show_commission: "Кнопка додавання",
     show_bridged: "Пристрої через міст",
+    show_title: "Показувати заголовок",
+    show_subtitle: "Показувати підзаголовок",
     illustration: "Ілюстрація",
     illustration_theme: "Тема ілюстрації",
     theme_auto: "Автоматично (за темою)",
@@ -1449,6 +1481,8 @@ const STRINGS = {
     show_thread: "Thread-hálózat",
     show_commission: "Hozzáadás gomb",
     show_bridged: "Hídon át csatlakozó eszközök",
+    show_title: "Cím megjelenítése",
+    show_subtitle: "Alcím megjelenítése",
     illustration: "Illusztráció",
     illustration_theme: "Illusztráció témája",
     theme_auto: "Automatikus (a témát követi)",
@@ -1538,6 +1572,8 @@ const STRINGS = {
     show_thread: "Sieť Thread",
     show_commission: "Tlačidlo pridania",
     show_bridged: "Premostené zariadenia",
+    show_title: "Zobraziť názov",
+    show_subtitle: "Zobraziť podnadpis",
     illustration: "Ilustrácia",
     illustration_theme: "Téma ilustrácie",
     theme_auto: "Automaticky (podľa témy)",
@@ -1627,6 +1663,8 @@ const STRINGS = {
     show_thread: "Síť Thread",
     show_commission: "Tlačítko přidání",
     show_bridged: "Přemostěná zařízení",
+    show_title: "Zobrazit název",
+    show_subtitle: "Zobrazit podnadpis",
     illustration: "Ilustrace",
     illustration_theme: "Motiv ilustrace",
     theme_auto: "Automaticky (podle motivu)",
@@ -1716,6 +1754,8 @@ const STRINGS = {
     show_thread: "Omrežje Thread",
     show_commission: "Gumb za dodajanje",
     show_bridged: "Premoščene naprave",
+    show_title: "Prikaži naslov",
+    show_subtitle: "Prikaži podnaslov",
     illustration: "Ilustracija",
     illustration_theme: "Tema ilustracije",
     theme_auto: "Samodejno (sledi temi)",
@@ -1800,6 +1840,8 @@ const STRINGS = {
     show_thread: "Thread tīkls",
     show_commission: "Pievienošanas poga",
     show_bridged: "Ierīces caur tiltu",
+    show_title: "Rādīt nosaukumu",
+    show_subtitle: "Rādīt apakšnosaukumu",
     illustration: "Ilustrācija",
     illustration_theme: "Ilustrācijas tēma",
     theme_auto: "Automātiski (seko tēmai)",
@@ -1879,6 +1921,8 @@ const STRINGS = {
     show_thread: "Δίκτυο Thread",
     show_commission: "Κουμπί προσθήκης",
     show_bridged: "Συσκευές μέσω γέφυρας",
+    show_title: "Εμφάνιση τίτλου",
+    show_subtitle: "Εμφάνιση υπότιτλου",
     illustration: "Εικονογράφηση",
     illustration_theme: "Θέμα εικονογράφησης",
     theme_auto: "Αυτόματο (ακολουθεί το θέμα)",
@@ -2339,9 +2383,21 @@ const unsubscribeRouters = (force = false) => {
 };
 
 // The version of the Matter Server, from its update entity (the add-on or app of the same name), when there is one.
+// Only the update entities are read: their ids are listed once per entity registry (a new object on each change of the
+// registry), instead of walking every state of the home on each render.
+const _updateIds = new WeakMap();
 const serverVersion = (hass) => {
-  for (const st of Object.values(hass?.states || {})) {
-    if (!st?.entity_id?.startsWith("update.")) continue;
+  const states = hass?.states;
+  if (!states) return null;
+  const reg = hass.entities;
+  let ids = reg ? _updateIds.get(reg) : null;
+  if (!ids) {
+    ids = Object.keys(reg || states).filter((id) => id.startsWith("update."));
+    if (reg) _updateIds.set(reg, ids);
+  }
+  for (const id of ids) {
+    const st = states[id];
+    if (!st) continue;
     const title = String(st.attributes?.title || st.attributes?.friendly_name || "");
     if (/matter server/i.test(title) && st.attributes?.installed_version) return String(st.attributes.installed_version);
   }
@@ -2473,6 +2529,7 @@ const sceneSvg = (down) => {
 // ---------------------------------------------------------------------------
 
 const COMMON_STYLE = `
+  :host([hide-title]) .titles .name, :host([hide-title]) .mhead > .title, :host([hide-subtitle]) .titles > .stats { display: none; }
   :host { --mc-accent: #5b5bd6; --mc-ok: var(--success-color, #43a047); --mc-warn: var(--warning-color, #ffa600);
           --mc-alert: var(--error-color, #db4437); --mc-idle: var(--secondary-text-color, #9e9e9e); --mc-na: var(--disabled-color, #9e9e9e);
           --mc-thread: #039be5; --mc-wifi: #7e57c2; --mc-ethernet: #9e9e9e; display: block; min-width: 0; }
@@ -2800,6 +2857,9 @@ class MatterCard extends HTMLElement {
   setConfig(config) {
     if (!config) throw new Error("Invalid configuration");
     this._config = { ...config };
+    // show_title / show_subtitle: the header's title and its stats line, hidden by the stylesheet (the pill stays).
+    this.toggleAttribute?.("hide-title", config.show_title === false);
+    this.toggleAttribute?.("hide-subtitle", config.show_subtitle === false);
     this._html = "";
     this._update();
   }
@@ -3384,7 +3444,7 @@ class MatterMiniCard extends MatterCard {
 // ---------------------------------------------------------------------------
 
 // Options on by default (left out of the YAML while on), and off by default (left out while off).
-const ON_BY_DEFAULT = ["show_thread", "show_commission", "illustration", "zoom"];
+const ON_BY_DEFAULT = ["show_title", "show_subtitle", "show_thread", "show_commission", "illustration", "zoom"];
 const OFF_BY_DEFAULT = ["show_bridged"];
 const DEFAULTS = { sort: "name", columns: 2, battery_threshold: 20, illustration_theme: "auto" };
 const LANGUAGES = [
@@ -3411,7 +3471,7 @@ class MatterCardEditor extends HTMLElement {
 
   _schema() {
     const tr = (k) => t(this._hass, this._config, k);
-    const toggles = ["show_thread", "show_commission", "show_bridged", "illustration"];
+    const toggles = ["show_title", "show_subtitle", "show_thread", "show_commission", "show_bridged", "illustration"];
     if (this.constructor.mini) toggles.push("zoom");
     return [
       { name: "title", selector: { text: {} } },
