@@ -1979,7 +1979,19 @@ const entitiesByDevice = (hass) => {
 
 // The Matter devices of the registry: the nodes (one device each), and the devices bridged by them, under their bridge.
 // `exclude` (device ids or names) leaves devices out.
+// Kept per device registry object and `exclude`: the card looks its devices up on every state change of Home
+// Assistant, which should not walk the whole registry each time.
+const _matterDevices = new WeakMap();
 const matterDevices = (hass, config = {}) => {
+  const reg = hass?.devices;
+  const key = JSON.stringify(Array.isArray(config.exclude) ? config.exclude : []);
+  const hit = reg && _matterDevices.get(reg);
+  if (hit && hit.key === key) return hit.value;
+  const value = scanMatterDevices(hass, config);
+  if (reg) _matterDevices.set(reg, { key, value });
+  return value;
+};
+const scanMatterDevices = (hass, config) => {
   const exclude = new Set((Array.isArray(config.exclude) ? config.exclude : []).map((x) => String(x).toLowerCase()));
   const all = Object.values(hass?.devices || {}).filter(isMatterDevice);
   const left = (d) => exclude.has(d.id.toLowerCase()) || exclude.has(String(d.name_by_user || d.name || "").toLowerCase());

@@ -377,6 +377,18 @@ test("the editors keep the YAML minimal and the mini card's editor has the full 
   assert.ok(!full.includes("exclude"));
 });
 
+test("the device scan is kept per registry and exclude", () => {
+  const hass = mockHass();
+  const a = mc.matterDevices(hass, {});
+  assert.equal(mc.matterDevices(hass, {}), a);
+  const name = a.nodes[0].name_by_user || a.nodes[0].name;
+  const b = mc.matterDevices(hass, { exclude: [name] });
+  assert.notEqual(b, a);
+  assert.equal(b.nodes.length, a.nodes.length - 1);
+  // A new registry object: scanned again.
+  assert.notEqual(mc.matterDevices({ ...hass, devices: { ...hass.devices } }, {}), a);
+});
+
 const LANGS = ["en", "fr", "de", "es", "sr", "sr-Latn", "it", "nl", "pt", "pl", "ro", "da", "sv", "bg", "ru", "uk", "hu", "sk", "cs", "sl", "lv", "el"];
 const vars = (s) => s.match(/\{\w+\}/g)?.sort() ?? [];
 const base = (k) => k.replace(/_(zero|one|two|few|many|other)$/, "");
