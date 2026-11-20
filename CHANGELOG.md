@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.1.2 - 2026-11-20
+
+### Performance
+- The Matter devices are found once per device registry change (and `exclude`), instead of on every state change of Home Assistant.
+- The visual editor no longer redraws its form on every state change while it is open: its data and fields are set again only when they change.
+
 ## 1.1.1 - 2026-11-18
 
 ### Fixes
