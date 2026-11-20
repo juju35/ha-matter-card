@@ -105,6 +105,8 @@ type: custom:matter-mini-card
 ```yaml
 type: custom:matter-card
 title: Matter devices
+show_title: true
+show_subtitle: true
 sort: status
 columns: 2
 battery_threshold: 20
@@ -130,6 +132,8 @@ zoom: true
 | Option | Card | Default | Description |
 |---|---|---|---|
 | `title` | both | `Matter devices` / `Matter` | Card title (the banner's name; the mini card's title) |
+| `show_title` | both | `true` | Show the title in the header (e.g. `false` under a section heading of your own); the status pill stays |
+| `show_subtitle` | both | `true` | Show the stats line under the title (Matter Server version, nodes, fabrics) |
 | `sort` | both | `name` | Order of the node tiles: `name`, or `status` for the issues first (unavailable, then low battery) |
 | `columns` | both | `2` | Node tiles per row (1 to 4); a card narrower than 390 px shows one per row |
 | `battery_threshold` | both | `20` | A battery below this percentage is a low battery (a battery binary sensor that is on is one too) |
