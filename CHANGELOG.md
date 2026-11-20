@@ -1,8 +1,12 @@
 # Changelog
 
-## 1.1.2 - 2026-11-20
+## 1.2.0 - 2026-11-20
+
+### Features
+- `show_title` and `show_subtitle` (both cards, in the visual editor, every language), as in the other ha-* cards: hide the header's title or its stats line; the status pill stays.
 
 ### Performance
+- The Matter Server version is read from the update entities only (listed once per entity registry change), instead of walking every state of the home on each render.
 - The Matter devices are found once per device registry change (and `exclude`), instead of on every state change of Home Assistant.
 - The visual editor no longer redraws its form on every state change while it is open: its data and fields are set again only when they change.
 
