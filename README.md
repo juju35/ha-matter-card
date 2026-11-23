@@ -48,7 +48,7 @@ The cards are built on top of Home Assistant's [Matter integration](https://www.
 | Integration | What the cards show |
 |---|---|
 | <img src="https://raw.githubusercontent.com/juju35/ha-matter-card/main/images/matter.svg" alt="" width="20"> [Matter](https://www.home-assistant.io/integrations/matter/) (Matter Server) | The Matter devices of the device registry, their entities (state, battery, power, Wi-Fi signal, Thread role), and the node diagnostics of the integration's `matter/node_diagnostics` websocket command (network type, node type, IP and MAC addresses, fabrics). The time a node was last seen comes from `matter/network_topology` when the Matter Server supports it |
-| [Thread](https://www.home-assistant.io/integrations/thread/) | The preferred Thread dataset (`thread/list_datasets`: network name, channel, PAN ID) and the border routers it discovers (`thread/discover_routers`) |
+| <img src="https://raw.githubusercontent.com/juju35/ha-matter-card/main/images/thread.png" alt="" width="20"> [Thread](https://www.home-assistant.io/integrations/thread/) | The preferred Thread dataset (`thread/list_datasets`: network name, channel, PAN ID) and the border routers it discovers (`thread/discover_routers`) |
 
 ## Prerequisites
 
