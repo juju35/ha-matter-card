@@ -1,6 +1,6 @@
 {
   "name": "ha-matter-card",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "Matter and Thread network card for Home Assistant: every Matter node, its transport and its health, under an animated banner.",
   "repository": {
     "type": "git",
