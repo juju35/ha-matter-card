@@ -141,7 +141,7 @@ export const FULL_STYLE = `
   /* Under 390 px (a phone, a narrow column) two tiles leave the name a few letters: one node per row. */
   @container (max-width: 389px) { .grid { grid-template-columns: minmax(0, 1fr); } }
   .tile { all: unset; position: relative; box-sizing: border-box; cursor: pointer; min-width: 0; min-height: 56px;
-          display: flex; align-items: center; gap: 10px; padding: 8px 10px 8px 8px; border-radius: 12px; --t: var(--mc-ok);
+          display: flex; align-items: center; gap: 10px; padding: 8px 10px 8px 8px; border-radius: 10px; --t: var(--mc-ok);
           background: var(--secondary-background-color, #f1f1f1); transition: background .2s; }
   .tile.lvl-warn { --t: var(--mc-warn); } .tile.lvl-alert { --t: var(--mc-alert); }
   /* The tile stays neutral: an issue shows on its icon, its state line and its status dot only. */
